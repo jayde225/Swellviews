@@ -1,5 +1,8 @@
 import java.util.*;
 
+/**
+ * A class for creating and editing Movie objects
+ */
 public class Movie {
     String title;
     Integer year;
