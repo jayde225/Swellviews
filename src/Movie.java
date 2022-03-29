@@ -16,5 +16,5 @@ public class Movie {
     String plot;
     String awards;
     String posterLink;
-    //MovieRatings ciriticRating;
+    //MovieRatings criticRating;
 }
