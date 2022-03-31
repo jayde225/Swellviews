@@ -5,72 +5,53 @@ import java.util.*;
  */
 public class Movie {
     //VARIABLES
-    private String title;
-    private Integer year;
-    private String MPARating;
-    private String releaseDate;
-    private String runTime;
-    private String genre;
+    private String Title;
+    private Integer Year;
+    private String Rated;
+    private String Released;
+    private String Runtime;
+    private String Genre;
     private ArrayList<String> movieGenres = new ArrayList<String>(); //Used to store all genres for a movie
-    private String director;
-    private String writer;
+    private String Director;
+    private String Writer;
     private ArrayList<String> movieWriters = new ArrayList<String>(); //Used to store all writes for a movie
-    private String actor;
+    private String Actors;
     private ArrayList<String> movieActors = new ArrayList<String>(); //Used to store all actors for a movie
-    private String plot;
-    private String awards;
-    private String posterLink;
-    //MovieRatings criticRating; - this needs to be built first
-
-    //CONSTRUCTORS
-    /**
-     * Constructs an object of Movie class type with default information
-     */
-    public Movie() {
-        title = "N/A";
-        year = 0000;
-        MPARating = "N/A";
-        releaseDate = "N/A";
-        runTime = "N/A";
-        genre = "N/A";
-        director = "N/A";
-        writer = "N/A";
-        actor = "N/A";
-        plot = "N/A";
-        awards = "N/A";
-        posterLink = "N/A";
-    }
+    private String Plot;
+    private String Awards;
+    private String Poster;
+    //MovieRatings Ratings; - this needs to be built first
 
     //GET FUNCTIONS
     /**
      * Returns the title of the movie object
      * @return the title of the movie
      */
-    public String getTitle() {return title;}
+    public String getTitle() {return Title;}
 
     /**
      * Returns the year of a movie object
      * @return the year the movie was made
      */
-    public Integer getYear() {return year;}
+    public Integer getYear() {return Year;}
 
     /**
      * Returns the MPA (maturity) rating of the movie object
      * @return the MPA (maturity) rating of the movie
      */
-    public String getMaturityRating() {return MPARating;}
+    public String getMPARating() {return Rated;}
 
     /**
      * Returns the release date of the movie object
      * @return the release date of the movie
      */
-    public String getReleaseDate() {return releaseDate;}
+    public String getReleaseDate() {return Released;}
 
     /**
      * Returns the runtime of the movie object
      * @return the runtime of the movie
      */
-    public String getRunTime() {return runTime;}
+    public String getRunTime() {return Runtime;}
 
     /**
      * Returns all genres of the movie object in one string
@@ -86,7 +67,7 @@ public class Movie {
      * Returns the director of the movie object
      * @return the director of the movie
      */
-    public String getDirector() { return director; }
+    public String getDirector() { return Director; }
 
     /**
      * Returns all writers of the movie object in one string
@@ -112,18 +93,18 @@ public class Movie {
      * Returns the plot description of the movie object
      * @return the plot description of the movie
      */
-    public String getPlot() { return plot; }
+    public String getPlot() { return Plot; }
 
     /**
      * Returns the award listing of the movie object
      * @return the award listing of the movie
      */
-    public String getAwards() { return awards; }
+    public String getAwards() { return Awards; }
 
 
     /**
      * Returns the poster link of the movie object
      * @return the poster link of the movie
      */
-    public String getPosterLink() { return posterLink; }
+    public String getPosterLink() { return Poster; }
 }
