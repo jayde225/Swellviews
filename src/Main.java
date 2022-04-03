@@ -7,60 +7,16 @@ import java.util.*; //import util for Scanner, Array List, and Sorting functions
  */
 public class Main {
     public static void main(String args[]) {
-        //VARIABLES
-        // String path = "C:\\Users\\jayde\\Desktop\\SampleMovieFile.json";
-        //String line = "";
-        //String jsonString = "";
-
         //GSON TEST CODE
-        String jsonString1 = "[{\"Title\":\"Avengers: Endgame\",\"Year\":\"2019\",\"imdbID\":\"tt4154796\",\"Genre\":\"action\"}, {\"Title\":\"Avengers: Infinity War\",\"Year\":\"2017\",\"imdbID\":\"tt4154796\",\"Type\":\"drama\"}]";
+        String jsonString = "[{\"Title\":\"Avengers: Endgame\",\"Year\":\"2019\",\"imdbID\":\"tt4154796\",\"Genre\":\"action\"}, {\"Title\":\"Avengers: Infinity War\",\"Year\":\"2017\",\"imdbID\":\"tt4154796\",\"Type\":\"drama\"}]";
         Gson gson = new Gson();
         Movie[] movieList;  // a java primitive array of SimpleMovie
         ArrayList<Movie> testArrayList = new ArrayList<Movie>();    // an array list to hold a collection of movies
-        movieList = gson.fromJson(jsonString1, Movie[].class);
+        movieList = gson.fromJson(jsonString, Movie[].class);
         Collections.addAll(testArrayList, movieList);
 
         for (Movie testMovie : testArrayList) {
             System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
         }
-
-        /*try {
-            //Create new file variable from input file
-            File movieData = new File(path);
-
-            //Create new scanner to iterate through file
-            Scanner scanLine = new Scanner(movieData);
-
-
-            Movie[] movieList;  //A java primitive array of SimpleMovie
-            ArrayList<Movie> testArrayList = new ArrayList<Movie>();
-
-            //Read each line and concatenate to one nested json string
-            while (scanLine.hasNextLine()) {
-                //line = scanLine.nextLine(); //Get line
-                //jsonString.concat(line); //Then, add line to string
-                //System.out.printf(line);
-                // Create a Gson object that will provide interface to convert strings to objects and objects to JSON strings
-
-
-                movieList = gson.fromJson(jsonString, Movie[].class);
-            }
-
-
-            Collections.addAll(testArrayList, movieList); //Version 1 method of adding
-
-            //GSON CODE
-            //Print out the titles of movies in the array list
-            for (Movie testMovie : testArrayList) {
-                System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
-            }
-            System.out.printf(String.valueOf(testArrayList.size()));
-
-            scanLine.close();
-
-        } catch (FileNotFoundException ex) {
-            System.out.println("Sorry, this file could not be opened");
-            return;
-        }*/
     }
 }

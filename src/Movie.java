@@ -20,7 +20,7 @@ public class Movie {
     private String Plot;
     private String Awards;
     private String Poster;
-    //MovieRatings Ratings; - this needs to be built first
+    private Ratings Ratings;
 
     //GET FUNCTIONS
     /**
@@ -101,10 +101,15 @@ public class Movie {
      */
     public String getAwards() { return Awards; }
 
-
     /**
      * Returns the poster link of the movie object
      * @return the poster link of the movie
      */
     public String getPosterLink() { return Poster; }
+
+    /**
+     * Returns the ratings of the movie object
+     * @return the ratings of the movie
+     */
+    public Ratings getRatings() { return Ratings; }
 }
