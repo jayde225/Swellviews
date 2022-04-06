@@ -9,7 +9,6 @@ public class User {
     private ArrayList<String> profiles = new ArrayList<String>();
     private double ratings;
     private ArrayList<MovieCollection> myCollections = new ArrayList<MovieCollection>();
-    private ;
 
 
     public ArrayList<MovieCollection> getMyCollections()
