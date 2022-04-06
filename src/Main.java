@@ -11,7 +11,7 @@ public class Main {
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader("c:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("C:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -28,8 +28,40 @@ public class Main {
         movieList = gson.fromJson(jsonString, Movie[].class);
         Collections.addAll(CompleteMovieArrayList, movieList);
 
+        //TEST - PRINT OUT HORROR MOVIES ONLY
         for (Movie testMovie : CompleteMovieArrayList) {
-            System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
+           if (testMovie.Genre.contains("Horror")) {
+                System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
+            }
+        }
+
+        //TEST - PRINT OUT MOVIES MADE IN 2003
+        System.out.println();
+        System.out.println();
+        for (Movie testMovie : CompleteMovieArrayList) {
+            if (testMovie.Year.equals(2003)) {
+                System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
+            }
+        }
+
+        //TEST - PRINT OUT MOVIES THAT STAR JOHNNY DEPP
+        System.out.println();
+        System.out.println();
+        for (Movie testMovie : CompleteMovieArrayList) {
+            if (testMovie.Actors.contains("Johnny Depp")) {
+                System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
+            }
+        }
+
+        //TEST - PRINT OUT ALL RATING SOURCES OF JOHNNY DEPP MOVIES
+        System.out.println();
+        System.out.println();
+        for (Movie testMovie : CompleteMovieArrayList) {
+            if (testMovie.Actors.contains("Johnny Depp")) {
+                for (Ratings testRating: testMovie.Ratings) {
+                    System.out.printf("This is the name of the rating source: " + testRating.Source + '\n');
+                }
+            }
         }
     }
 }

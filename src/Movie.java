@@ -5,22 +5,19 @@ import java.util.*;
  */
 public class Movie {
     //VARIABLES
-    private String Title;
-    private Integer Year;
-    private String Rated;
-    private String Released;
-    private String Runtime;
-    private String Genre;
-    private ArrayList<String> movieGenres = new ArrayList<String>(); //Used to store all genres for a movie
-    private String Director;
-    private String Writer;
-    private ArrayList<String> movieWriters = new ArrayList<String>(); //Used to store all writes for a movie
-    private String Actors;
-    private ArrayList<String> movieActors = new ArrayList<String>(); //Used to store all actors for a movie
-    private String Plot;
-    private String Awards;
-    private String Poster;
-    private Ratings Ratings;
+    String Title;
+    Integer Year;
+    String Rated;
+    String Released;
+    String Runtime;
+    String Genre;
+    String Director;
+    String Writer;
+    String Actors;
+    String Plot;
+    String Awards;
+    String Poster;
+    ArrayList<Ratings> Ratings = new ArrayList<Ratings>(); //Used to store all ratings for a movie
 
     //GET FUNCTIONS
     /**
@@ -55,13 +52,9 @@ public class Movie {
 
     /**
      * Returns all genres of the movie object in one string
+     * @return the string list of genres of the movie
      */
-    public void getGenres() {
-        String allGenres = "";
-        for (String i : movieGenres) {
-            allGenres.concat(i + ","); //Iterate through ArrayList and attach each element to the string
-        }
-    }
+    public String getGenres() { return Genre;}
 
     /**
      * Returns the director of the movie object
@@ -71,23 +64,15 @@ public class Movie {
 
     /**
      * Returns all writers of the movie object in one string
+     * @return the string list of writers of the movie
      */
-    public void getWriters() {
-        String allWriters = "";
-        for (String i : movieWriters) {
-            allWriters.concat(i + ","); //Iterate through ArrayList and attach each element to the string
-        }
-    }
+    public String getWriters() { return Writer; }
 
     /**
      * Returns all actors of the movie object in one string
+     * @return the string list of actors of the movie
      */
-    public void getActors() {
-        String allActors = "";
-        for (String i : movieActors) {
-            allActors.concat(i + ","); //Iterate through ArrayList and attach each element to the string
-        }
-    }
+    public String getActors() { return Actors; }
 
     /**
      * Returns the plot description of the movie object
@@ -111,5 +96,5 @@ public class Movie {
      * Returns the ratings of the movie object
      * @return the ratings of the movie
      */
-    public Ratings getRatings() { return Ratings; }
+    public ArrayList<Ratings> getRatings() { return Ratings; }
 }

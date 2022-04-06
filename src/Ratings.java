@@ -3,8 +3,8 @@
  */
 public class Ratings {
     //VARIABLES
-    private String Source;
-    private String Value;
+    String Source;
+    String Value;
 
     //GET FUNCTIONS
     /**
@@ -15,7 +15,7 @@ public class Ratings {
 
     /**
      * Returns the value of the Rating object
-     * @return the value of the rating (as a string)
+     * @return the value of the rating
      */
     public String getValue() {return Value;}
 }
