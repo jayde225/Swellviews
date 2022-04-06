@@ -2,8 +2,7 @@ import java.util.ArrayList;
 
 public class MovieCollection {
 
-    private int capacity;
-    private ArrayList<Movie> MovieCollection = new ArrayList<Movie>(capacity);
+    private ArrayList<Movie> MovieCollection = new ArrayList<Movie>();
     private int collectionLength = 0;
 
     // GET FUNCTIONS
