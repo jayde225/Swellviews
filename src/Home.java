@@ -5,6 +5,7 @@ import java.awt.geom.*;
 import javax.swing.*;
 
 import com.google.gson.*; //import for Gson capabilities
+import java.io.*; //import for File capabilities
 import java.util.*; //import for ArrayList
 
 public class Home {
@@ -20,14 +21,27 @@ public class Home {
 
         //MEGAN -- Add a dropdown thingamabob here (some stuff at the bottom for you to work with, but it's very early stage)
 
-        //GSON TEST CODE - THIS WILL BE REPLACED EVENTUALLY WITH A FULL ARRAYLIST OF ALL MOVIES IN JSON FILE
-        String jsonString1 = "[{\"Title\":\"Avengers: Endgame\",\"Year\":\"2019\",\"imdbID\":\"tt4154796\",\"Genre\":\"action\"}, {\"Title\":\"Avengers: Infinity War\",\"Year\":\"2017\",\"imdbID\":\"tt4154796\",\"Type\":\"drama\"}]";
-        Gson gson = new Gson(); //Create a new GSON object
-        Movie[] movieList;
-        ArrayList<Movie> testArrayList = new ArrayList<Movie>();
-        movieList = gson.fromJson(jsonString1, Movie[].class); //Convert from JSON to GSON
-        Collections.addAll(testArrayList, movieList); //Add all movies to ArrayList with built-in Collections class
-        //This should create 2 movies objects in testArrayList, Avengers: Endgame and Avengers: Infinity War
+        //GSON IMPLEMENTATION CODE
+        String jsonString = "";
+        Scanner inFile = null;
+        try {
+            inFile = new Scanner(new FileReader("c:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
+        } catch (FileNotFoundException fe) {
+            System.out.println("The file could not be opened.");
+            System.exit(0);
+        }
+
+        // Build the jsonString object line by line
+        while (inFile.hasNextLine()) {
+            jsonString = jsonString + inFile.nextLine();
+        }
+
+        //Use GSON to create an ArrayList of movies in JSON file
+        Gson gson = new Gson();
+        Movie[] movieList;  //A java primitive of Movie class
+        ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
+        movieList = gson.fromJson(jsonString, Movie[].class);
+        Collections.addAll(CompleteMovieArrayList, movieList);
 
 
         //Homepage Header Attributes (added from above)
