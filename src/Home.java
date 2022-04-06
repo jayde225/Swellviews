@@ -4,55 +4,31 @@ import java.awt.event.ActionListener;
 import java.awt.geom.*;
 import javax.swing.*;
 
-import com.google.gson.*; //import for Gson capabilities
-import java.io.*; //import for File capabilities
-import java.util.*; //import for ArrayList
-
 public class Home {
-    public static void main(String[] args){
+    public static void main(String[] args) {
+
+        boolean loggedIn = false;
         //Homepage Attribute Declarations
-        JFrame frame = new JFrame("Swellviews");
-        JTextField searchField = new JTextField("Enter Movie Name");
+        JFrame homeFrame = new JFrame("Swellviews");
+        JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
+            //so can search without having to delete default text, or just make label (see accountmenu/login)
         JButton buttonSearch = new JButton("Search");
         JSeparator spacer = new JSeparator();
-        JButton buttonFilter = new JButton("Filter");
+        JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
         JButton buttonCollections = new JButton("Collections");
-        JLabel labelAccount = new JLabel("Account");
-
-        //MEGAN -- Add a dropdown thingamabob here (some stuff at the bottom for you to work with, but it's very early stage)
-
-        //GSON IMPLEMENTATION CODE
-        String jsonString = "";
-        Scanner inFile = null;
-        try {
-            inFile = new Scanner(new FileReader("c:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
-        } catch (FileNotFoundException fe) {
-            System.out.println("The file could not be opened.");
-            System.exit(0);
-        }
-
-        // Build the jsonString object line by line
-        while (inFile.hasNextLine()) {
-            jsonString = jsonString + inFile.nextLine();
-        }
-
-        //Use GSON to create an ArrayList of movies in JSON file
-        Gson gson = new Gson();
-        Movie[] movieList;  //A java primitive of Movie class
-        ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
-        movieList = gson.fromJson(jsonString, Movie[].class);
-        Collections.addAll(CompleteMovieArrayList, movieList);
-
+        JButton buttonAccount = new JButton("Account");
 
         //Homepage Header Attributes (added from above)
         JPanel header = new JPanel();
-        header.setLayout(new GridLayout(1,8));
+        header.setLayout(new GridLayout(1, 8));
         header.add(searchField);
         header.add(buttonSearch);
         header.add(spacer);
-        header.add(buttonFilter);
+        header.add(buttonFilter);//***************************************
         header.add(buttonCollections);
-        header.add(labelAccount);
+        header.add(buttonAccount);
+
+                accountMenu(buttonAccount, loggedIn);
 
         //Testing MovieDisplay with blank Rectangles named "Movie_"
         MovieDisplay movie1 = new MovieDisplay("Movie1");
@@ -64,22 +40,22 @@ public class Home {
         MovieDisplay movie7 = new MovieDisplay("Movie7");
         MovieDisplay movie8 = new MovieDisplay("Movie8");
 
-        frame.setLayout(new BorderLayout());
+        homeFrame.setLayout(new BorderLayout());
 
         //Testing grid layout
-        movie1.setSize(90,140);
-        movie2.setSize(90,140);
-        movie3.setSize(90,140);
-        movie4.setSize(90,140);
-        movie5.setSize(90,140);
-        movie6.setSize(90,140);
-        movie7.setSize(90,140);
-        movie8.setSize(90,140);
+        movie1.setSize(90, 140);
+        movie2.setSize(90, 140);
+        movie3.setSize(90, 140);
+        movie4.setSize(90, 140);
+        movie5.setSize(90, 140);
+        movie6.setSize(90, 140);
+        movie7.setSize(90, 140);
+        movie8.setSize(90, 140);
 
         String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
 
         JPanel movieGrid = new JPanel();
-        movieGrid.setLayout(new GridLayout(2,4));
+        movieGrid.setLayout(new GridLayout(2, 4));
         movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName));
 
         //Testing grid layout
@@ -92,22 +68,75 @@ public class Home {
         movieGrid.add(movie7);
         movieGrid.add(movie8);
 
-
         //Positioning homepage frame elements
-        frame.add(movieGrid,BorderLayout.CENTER); //Adds MovieDisplay test to center of page
-        frame.add(header, BorderLayout.PAGE_START);
-        frame.setSize(500,500);
-        frame.setLocationRelativeTo(null);
+        homeFrame.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
+        homeFrame.add(header, BorderLayout.PAGE_START);
+        homeFrame.setSize(500, 500);
+        homeFrame.setLocationRelativeTo(null);
 
         //Standard enabling and closing statements
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        homeFrame.setVisible(true);
+        homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    //Contains the Filter Dropdown Menu, will be implemented into homepage soon when I've figured out how it works - George
-    public void filterDropDown() {
-        String[] options = {"Genre", "Age Rating", "Runtime"};
+    public static void accountMenu(JButton accountB, boolean loggedIn){ //make popups bigger
 
-        JComboBox<String> jComboBox = new JComboBox<>(options);
-        jComboBox.setBounds(80,50,140,20);
+        final JPopupMenu accountmenu = new JPopupMenu();
+        final JMenu loginmenu = new JMenu("Log In");
+        //final JPopupMenu logoutmenu = new JPopupMenu();
+
+        JButton enterB = new JButton("Enter");
+        JMenuItem logoutB = new JMenuItem("Log out");
+
+        JLabel userLabel = new JLabel("Username:");
+        JLabel passLabel = new JLabel("Password:");
+
+        JTextField userfield = new JTextField();
+        JTextField passfield = new JTextField();
+
+        loginmenu.add(userLabel); //setMenuLoction(int x, int y) for login window
+        loginmenu.add(userfield);
+        loginmenu.add(passLabel);
+        loginmenu.add(passfield);
+        loginmenu.add(enterB);
+
+        if(loggedIn == true) {
+            accountmenu.add(logoutB);
+        }
+        else{
+            accountmenu.add(loginmenu);
+        } //SEE loginB.addActionListener comment!
+
+
+        accountB.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                accountmenu.show(accountB, accountB.getWidth(), accountB.getHeight());
+            }
+        } );
+
+        enterB.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
+                javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
+                //once closes, initiate login procedure
+
+                //how use enter key OR click to submit
+
+                //need error handling (not close) for incorrect login, create account
+                // or to show login successful
+
+
+            }
+        } );
+
+        /*logoutB.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent ae) {
+                logoutmenu.show(logoutB, logoutB.getWidth(), logoutB.getHeight());
+
+                //This will need to do the logout procedure, what ever that looks like ***************
+                //will also need to close menu and somehow make loggedIn = false; again
+                //since menu item, will not use action listener and will need to act
+                //from that menu selection
+            }
+        } );*/
     }
 }
