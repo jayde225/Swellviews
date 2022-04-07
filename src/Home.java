@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.*;
 import javax.swing.*;
 
-public class Home {
+public class Home extends JFrame{
     public static void main(String[] args) {
 
         boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
@@ -20,7 +20,7 @@ public class Home {
 
 
         //Homepage Header Attributes (added from above)
-        JPanel header = new JPanel();
+        JMenuBar header = new JMenuBar();
         header.setLayout(new GridLayout(1, 8));
         header.add(searchField);
         header.add(buttonSearch);
@@ -30,7 +30,7 @@ public class Home {
         header.add(buttonAccount);
 
         accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
-        collectionMenu(buttonCollections); // Calls the collectionMenu funciton and attaches it to the "Collections" button (buttonCollections)
+        collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
 
         //Testing MovieDisplay with blank movies named "Movie_"
         MovieDisplay movie1 = new MovieDisplay("Movie1");
@@ -44,20 +44,11 @@ public class Home {
 
         homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
 
-        //Testing grid layout
-        movie1.setSize(90, 140);
-        movie2.setSize(90, 140);
-        movie3.setSize(90, 140);
-        movie4.setSize(90, 140);
-        movie5.setSize(90, 140);
-        movie6.setSize(90, 140);
-        movie7.setSize(90, 140);
-        movie8.setSize(90, 140);
-
         String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
+
         //MovieDisplay grid layout on homepage:
         JPanel movieGrid = new JPanel();
-        movieGrid.setLayout(new GridLayout(2, 4));
+        movieGrid.setLayout(new GridLayout(2,4));
         movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
         //Testing grid layout
@@ -80,6 +71,7 @@ public class Home {
         homeFrame.setVisible(true);
         homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
+
     public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
 
         JPopupMenu accountmenu = new JPopupMenu();
@@ -135,19 +127,66 @@ public class Home {
     }
 
     public static void collectionMenu (JButton buttonCollections) {
-        JPopupMenu collectionMenu = new JPopupMenu();
 
+        JPopupMenu collectionMenu = new JPopupMenu(); // Main popup for list of collections
+        JFrame createNewCollection = new JFrame("Create a New Collection"); //"Popup" window for entering the name of a new collection
+            JPanel createNewCollectionPanel = new JPanel(); //Needed for BoxLayout
+            createNewCollection.add(createNewCollectionPanel);
+            createNewCollectionPanel.setLayout(new BoxLayout(createNewCollectionPanel, BoxLayout.Y_AXIS)); // BoxLayout is simple to organize elements in a column
+            createNewCollection.setResizable(false); // Makes the window non-resizable
+
+        //Button for creating a new collection:
+        JButton createCollection = new JButton("Create a New Collection");
+
+        //Creating items for the collectionMenu list:
         JMenuItem testItem1 = new JMenuItem("Test Item 1");
-        collectionMenu.add(testItem1);
-
         JMenuItem testItem2 = new JMenuItem("Test Item 123456789");
-        collectionMenu.add(testItem2);
 
-        buttonCollections.addActionListener (new ActionListener() {
+        //Adding items to the collectionMenu list:
+        collectionMenu.add(testItem1);
+        collectionMenu.add(testItem2);
+        collectionMenu.add(createCollection); // Button for creating a new collection (should be kept at the bottom)
+
+        //Creating items for the createNewCollection popup:
+        JLabel collectionNameLabel = new JLabel("Enter Collection Name:");
+        JTextField collectionNameField = new JTextField("New Collection");
+            collectionNameField.setSize(100,10);
+        JButton collectionCreate = new JButton ("Create");
+
+        //Adding items to the createNewCollection popup:
+        createNewCollectionPanel.add(collectionNameLabel);
+        createNewCollectionPanel.add(collectionNameField);
+        createNewCollectionPanel.add(collectionCreate);
+
+        createNewCollection.setSize(310, 100);
+        createNewCollection.setLocationRelativeTo(null);
+
+        //ActionListener for showing collection list menu when "Collections" button pressed
+        buttonCollections.addActionListener (new ActionListener() { // When the collections button (buttonCollections) is pressed...
             @Override
-            public void actionPerformed(ActionEvent e) {
-                collectionMenu.show(buttonCollections, buttonCollections.getHorizontalAlignment(),buttonCollections.getHeight());
+            public void actionPerformed(ActionEvent button_pressed) {
+                collectionMenu.show(buttonCollections, buttonCollections.getHorizontalAlignment(),buttonCollections.getHeight()); //Menu appears below and on the right side of the collections button (buttonCollections)
             }
         });
+
+        //ActionListener for showing new collection creation menu when "Create a New Collection" button pressed
+        createCollection.addActionListener (new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                createNewCollection.setVisible(true);
+            }
+        });
+
+        //ActionListener for adding a new collection when "Create" is pressed within the createNewCollection Frame
+        collectionCreate.addActionListener (new ActionListener(){
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(collectionNameField.getText());
+            }
+        });
+
+
     }
 }
