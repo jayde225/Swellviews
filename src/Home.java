@@ -3,9 +3,33 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.*;
 import javax.swing.*;
+import java.util.*;
+import java.io.*;
+import com.google.gson.*; //import for Gson capabilities
 
 public class Home extends JFrame{
     public static void main(String[] args) {
+        //GSON IMPLEMENTATION CODE
+        String jsonString = "";
+        Scanner inFile = null;
+        try {
+            inFile = new Scanner(new FileReader("C:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
+        } catch (FileNotFoundException fe) {
+            System.out.println("The file could not be opened.");
+            System.exit(0);
+        }
+
+        // Build the jsonString object line by line
+        while (inFile.hasNextLine()) {
+            jsonString = jsonString + inFile.nextLine();
+        }
+
+        Gson gson = new Gson();
+        Movie[] movieList;  //A java primitive of Movie class
+        ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
+        movieList = gson.fromJson(jsonString, Movie[].class);
+        Collections.addAll(CompleteMovieArrayList, movieList);
+
 
         boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
