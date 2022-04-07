@@ -7,16 +7,17 @@ import javax.swing.*;
 public class Home {
     public static void main(String[] args) {
 
-        boolean loggedIn = false;
+        boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
         JFrame homeFrame = new JFrame("Swellviews");
         JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
-            //so can search without having to delete default text, or just make label (see accountmenu/login)
+                                                                     //so can search without having to delete default text, or just make label (see accountmenu/login)
         JButton buttonSearch = new JButton("Search");
-        JSeparator spacer = new JSeparator();
+        JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
         JButton buttonCollections = new JButton("Collections");
         JButton buttonAccount = new JButton("Account");
+
 
         //Homepage Header Attributes (added from above)
         JPanel header = new JPanel();
@@ -28,9 +29,10 @@ public class Home {
         header.add(buttonCollections);
         header.add(buttonAccount);
 
-                accountMenu(buttonAccount, loggedIn);
+        accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
+        collectionMenu(buttonCollections); // Calls the collectionMenu funciton and attaches it to the "Collections" button (buttonCollections)
 
-        //Testing MovieDisplay with blank Rectangles named "Movie_"
+        //Testing MovieDisplay with blank movies named "Movie_"
         MovieDisplay movie1 = new MovieDisplay("Movie1");
         MovieDisplay movie2 = new MovieDisplay("Movie2");
         MovieDisplay movie3 = new MovieDisplay("Movie3");
@@ -40,7 +42,7 @@ public class Home {
         MovieDisplay movie7 = new MovieDisplay("Movie7");
         MovieDisplay movie8 = new MovieDisplay("Movie8");
 
-        homeFrame.setLayout(new BorderLayout());
+        homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
 
         //Testing grid layout
         movie1.setSize(90, 140);
@@ -53,10 +55,10 @@ public class Home {
         movie8.setSize(90, 140);
 
         String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
-
+        //MovieDisplay grid layout on homepage:
         JPanel movieGrid = new JPanel();
         movieGrid.setLayout(new GridLayout(2, 4));
-        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName));
+        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
         //Testing grid layout
         movieGrid.add(movie1);
@@ -78,53 +80,45 @@ public class Home {
         homeFrame.setVisible(true);
         homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    public static void accountMenu(JButton accountB, boolean loggedIn){ //make popups bigger
+    public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
 
-        final JPopupMenu accountmenu = new JPopupMenu();
-        final JMenu loginmenu = new JMenu("Log In");
+        JPopupMenu accountmenu = new JPopupMenu();
+        JMenu loginmenu = new JMenu("Log In");
         //final JPopupMenu logoutmenu = new JPopupMenu();
 
-        JButton enterB = new JButton("Enter");
-        JMenuItem logoutB = new JMenuItem("Log out");
+        JButton enterB = new JButton("Enter");          // Confirm login button
+        JMenuItem logoutB = new JMenuItem("Log out");   // Logout button
 
-        JLabel userLabel = new JLabel("Username:");
-        JLabel passLabel = new JLabel("Password:");
+        JLabel userLabel = new JLabel("Username:");     // Username Label
+        JLabel passLabel = new JLabel("Password:");     // Password Label
 
-        JTextField userfield = new JTextField();
-        JTextField passfield = new JTextField();
+        JTextField userField = new JTextField();            // User enters username
+        JTextField passField = new JTextField();            // User enters password
 
         loginmenu.add(userLabel); //setMenuLoction(int x, int y) for login window
-        loginmenu.add(userfield);
+        loginmenu.add(userField);
         loginmenu.add(passLabel);
-        loginmenu.add(passfield);
+        loginmenu.add(passField);
         loginmenu.add(enterB);
 
-        if(loggedIn == true) {
-            accountmenu.add(logoutB);
-        }
-        else{
-            accountmenu.add(loginmenu);
-        } //SEE loginB.addActionListener comment!
+        if(loggedIn == true) {accountmenu.add(logoutB);}       // If logged in, show logout menu
+        else{accountmenu.add(loginmenu);}     // If logged out, show login menu
 
-
-        accountB.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                accountmenu.show(accountB, accountB.getWidth(), accountB.getHeight());
+        buttonAccount.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                accountmenu.show(buttonAccount, buttonAccount.getHorizontalAlignment(), buttonAccount.getHeight());
             }
-        } );
+        });
 
-        enterB.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+        enterB.addActionListener( new ActionListener() { /** No functionality Currently */
+            public void actionPerformed(ActionEvent button_pressed) {
                 //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
                 javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
                 //once closes, initiate login procedure
-
                 //how use enter key OR click to submit
-
                 //need error handling (not close) for incorrect login, create account
                 // or to show login successful
-
-
             }
         } );
 
@@ -137,6 +131,23 @@ public class Home {
                 //since menu item, will not use action listener and will need to act
                 //from that menu selection
             }
-        } );*/
+        } );*/ /** Logout (Unfinished) */
+    }
+
+    public static void collectionMenu (JButton buttonCollections) {
+        JPopupMenu collectionMenu = new JPopupMenu();
+
+        JMenuItem testItem1 = new JMenuItem("Test Item 1");
+        collectionMenu.add(testItem1);
+
+        JMenuItem testItem2 = new JMenuItem("Test Item 123456789");
+        collectionMenu.add(testItem2);
+
+        buttonCollections.addActionListener (new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                collectionMenu.show(buttonCollections, buttonCollections.getHorizontalAlignment(),buttonCollections.getHeight());
+            }
+        });
     }
 }
