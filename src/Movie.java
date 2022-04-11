@@ -97,4 +97,28 @@ public class Movie {
      * @return the ratings of the movie
      */
     public ArrayList<Ratings> getRatings() { return Ratings; }
+
+    // compare movies by title then year
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
+        if (obj.getClass() != this.getClass()) {
+            return false;
+        }
+
+        final Movie other = (Movie) obj;
+        if (!Objects.equals(this.Title, other.Title)) {
+            return false;
+        }
+
+        if (this.Year != other.Year) {
+            return false;
+        }
+
+        return true;
+    }
+
 }

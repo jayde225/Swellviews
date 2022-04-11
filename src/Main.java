@@ -6,7 +6,7 @@ import java.io.*; //import File class
  * A class used for creating the main application
  */
 
-/**
+
 public class Main {
     public static void main(String args[]) {
         //GSON IMPLEMENTATION CODE
@@ -67,4 +67,3 @@ public class Main {
         }
     }
 }
- */
