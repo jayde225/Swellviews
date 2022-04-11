@@ -1,11 +1,39 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.*;
 import javax.swing.*;
+import java.util.*;
+import java.io.*;
+import com.google.gson.*; //import for Gson capabilities
+
 
 public class Home extends JFrame{
+
+    private static int movieCounter;
+
     public static void main(String[] args) {
+
+        //GSON IMPLEMENTATION CODE--------------------------------------------------------------------------------------
+        String jsonString = "";
+        Scanner inFile = null;
+        try {
+            inFile = new Scanner(new FileReader("C:\\Users\\gmcop\\IdeaProjects\\Swellviews_Local\\src\\SampleMovieFile.json"));
+        } catch (FileNotFoundException fe) {
+            System.out.println("The file could not be opened.");
+            System.exit(0);
+        }
+
+        // Build the jsonString object line by line
+        while (inFile.hasNextLine()) {
+            jsonString = jsonString + inFile.nextLine();
+        }
+
+        Gson gson = new Gson();
+        Movie[] movieList;  //A java primitive of Movie class
+        ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
+        movieList = gson.fromJson(jsonString, Movie[].class);
+        Collections.addAll(CompleteMovieArrayList, movieList);
+        //--------------END GSON IMPLEMENTATION-------------------------------------------------------------------------
 
         boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
@@ -17,6 +45,14 @@ public class Home extends JFrame{
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
         JButton buttonCollections = new JButton("Collections");
         JButton buttonAccount = new JButton("Account");
+        JButton getMoreMovies = new JButton("Show More");
+            //int movieCounter = 0; ; //Why is this not just an int/final int? *****************************************************
+            getMoreMovies.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent button_pressed) {
+                    movieGridUpdater(homeFrame, CompleteMovieArrayList);
+                }
+            });
 
 
         //Homepage Header Attributes (added from above)
@@ -32,17 +68,23 @@ public class Home extends JFrame{
         accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
 
-        //Testing MovieDisplay with blank movies named "Movie_"
-        MovieDisplay movie1 = new MovieDisplay("Movie1");
-        MovieDisplay movie2 = new MovieDisplay("Movie2");
-        MovieDisplay movie3 = new MovieDisplay("Movie3");
-        MovieDisplay movie4 = new MovieDisplay("Movie4");
-        MovieDisplay movie5 = new MovieDisplay("Movie5");
-        MovieDisplay movie6 = new MovieDisplay("Movie6");
-        MovieDisplay movie7 = new MovieDisplay("Movie7");
-        MovieDisplay movie8 = new MovieDisplay("Movie8");
-
         homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
+
+        movieGridUpdater(homeFrame,  CompleteMovieArrayList);
+
+        //Positioning homepage frame elements
+        homeFrame.add(header, BorderLayout.PAGE_START);
+        homeFrame.add(getMoreMovies, BorderLayout.PAGE_END);
+        homeFrame.setSize(500, 500);
+        homeFrame.setLocationRelativeTo(null);
+
+        //Standard enabling and closing statements
+        homeFrame.setVisible(true);
+        homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    }
+
+    public static void movieGridUpdater(JFrame home, ArrayList<Movie> movieArrayList){
 
         String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
 
@@ -51,7 +93,23 @@ public class Home extends JFrame{
         movieGrid.setLayout(new GridLayout(2,4));
         movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
-        //Testing grid layout
+        MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+        MovieDisplay movie2 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+        MovieDisplay movie3 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+        MovieDisplay movie4 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+        MovieDisplay movie5 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+        MovieDisplay movie6 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+        MovieDisplay movie7 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+        MovieDisplay movie8 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
+        movieCounter++;
+
         movieGrid.add(movie1);
         movieGrid.add(movie2);
         movieGrid.add(movie3);
@@ -61,16 +119,9 @@ public class Home extends JFrame{
         movieGrid.add(movie7);
         movieGrid.add(movie8);
 
-        //Positioning homepage frame elements
-        homeFrame.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
-        homeFrame.add(header, BorderLayout.PAGE_START);
-        homeFrame.setSize(500, 500);
-        homeFrame.setLocationRelativeTo(null);
-
-        //Standard enabling and closing statements
-        homeFrame.setVisible(true);
-        homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        home.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
     }
+
 
     public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
 

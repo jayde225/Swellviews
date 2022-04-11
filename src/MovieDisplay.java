@@ -1,46 +1,57 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Objects;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class MovieDisplay extends JPanel {
 
     private String movieName;
+    private String moviePoster;
 
-    public MovieDisplay(String name) {
-        this.movieName = name;
+    public MovieDisplay(String name, String poster) {
+        this.movieName = name; this.moviePoster = poster;
     }
 
     //Static Size Version:
     @Override
     public void paintComponent(Graphics g){
-        Graphics2D g2d = (Graphics2D) g; //cast it
-        g2d.drawRect(0, 0, 240, 320);
-        g2d.setColor(Color.gray);
-        g2d.fillRect(0, 0, 240, 320);
 
-        g2d.setColor(Color.darkGray);
+        Graphics2D g2d = (Graphics2D) g; //cast it
+
+        if (Objects.equals(moviePoster, "N/A")){
+            g2d.drawRect(0, 0, 300, 440);
+            g2d.setColor(Color.gray);
+            g2d.fillRect(0, 0, 300, 440);
+
+            g2d.setColor(Color.darkGray);
+            g2d.setFont(new Font("Missing Image Questionmark", Font.BOLD, 350));
+            g2d.drawString("?",40,330);
+            g2d.setFont(new Font("Movie Title W/O Poster", Font.PLAIN, 30));
+            g2d.drawString(this.movieName, 0, 470);
+        }
+        else {
+            URL url = null;
+            try {
+                url = new URL(moviePoster);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            BufferedImage movie_image = null;
+            try {
+                movie_image = ImageIO.read(url);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            g2d.drawImage(movie_image, 0, 0, null);
+            g2d.setFont(new Font("Movie Title W/ Poster", Font.PLAIN, 30));
+            g2d.drawString(this.movieName, movie_image.getMinX(), movie_image.getHeight()+30);
+        }
+
+
         g2d.setFont(new Font("Movie Title", Font.PLAIN, 30));
-        g2d.drawString(this.movieName, 70, 350);
-        g2d.setFont(new Font("Missing Image Questionmark", Font.BOLD, 250));
-        g2d.drawString("?",43,240);
     }
-
-    //Dynamic Size Version (BROKEN):
-    /**
-    @Override
-    public void paintComponent(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g; //cast it
-        g2d.drawRect(0, 0, (getWidth())-50, (getHeight())-50);
-        g2d.setColor(Color.gray);
-        g2d.fillRect(0, 0, (getWidth())-50, (getHeight())-50);
-
-        g2d.setColor(Color.darkGray);
-        g2d.setFont(new Font("Movie Title", Font.PLAIN, 50));
-        g2d.drawString(this.movieName, 35, 370);
-        g2d.setFont(new Font("Missing Image Questionmark", Font.BOLD, 250));
-        g2d.drawString("?",43,240);
-    }
-*/
 }
