@@ -1,17 +1,20 @@
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * used to manage collections: adding movies, removing movies, and correctly comparing them
+ */
 public class UserMovieCollection {
 
+    // VARIABLES
     private ArrayList<UserMovieRating> MovieCollection = new ArrayList<UserMovieRating>();
     private String collectionName;
 
     // CONSTRUCTOR
-    public UserMovieCollection()
-    {
-
-    }
-
+    /**
+     * ensures we are managing the correct collection
+     * @param name
+     */
     public UserMovieCollection(String name)
     {
         collectionName = name;
@@ -36,7 +39,7 @@ public class UserMovieCollection {
     }
 
 
-    // WORKING FUNCTIONS
+    // MOVIE COLLECTION FUNCTIONS
     /**
      * checks if the movie is already added. if not, it sets the last place of the list as the movie inputed then adds one. returns if adding was successful or not
      * @param newMovie
@@ -76,7 +79,12 @@ public class UserMovieCollection {
         return false;
     }
 
-    // compare moviecollections by collectionName
+    //COMPARISON
+    /**
+     * compares movie collections with the collection name
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

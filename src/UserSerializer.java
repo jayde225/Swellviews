@@ -9,16 +9,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
+/**
+ * allows for a file to be read and to be written
+ */
 public class UserSerializer {
 
+    // VARIABLES
     private String filename;
 
+    // CONSTRUCTORS
+
+    /**
+     * sets the inputed file name to the file name actually being used
+     * @param filename
+     */
     public UserSerializer(String filename)
     {
         this.filename = filename;
     }
 
-    // read json info, turn into file, then returns data
+    // READ AND WRITING FUNCTIONS
+    /**
+     * read json file then turn it into a file, then returns file with data in it
+     * @return
+     */
     public ArrayList<User> read()
     {
         String jsonString = "";
@@ -43,7 +57,10 @@ public class UserSerializer {
         return userList;
     }
 
-    // writes to the file
+    /**
+     * uses the created file and edits or writes in it
+     * @param Users
+     */
     public void write(ArrayList<User> Users)
     {
         Gson gson = new GsonBuilder()

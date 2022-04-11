@@ -1,17 +1,29 @@
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * works what the user stores such as collections, where you can add collections and remove collections to your account
+ */
 public class User {
 
+    // VARIABLES
     private String username;
     private ArrayList<UserMovieCollection> myCollections = new ArrayList<UserMovieCollection>();
 
     // GET FUNCTIONS
+    /**
+     * returns the username of the user object
+     * @return
+     */
     public String getUsername()
     {
         return username;
     }
 
+    /**
+     * returns the ArrayList of UserMovieColection, myCollecions, of the user object
+     * @return
+     */
     public ArrayList<UserMovieCollection> getMyCollections()
     {
         return myCollections;
@@ -19,6 +31,10 @@ public class User {
 
 
     // COLLECTION FUNCTIONS
+    /**
+     * checks if there are any collections with the same desired name already existing, and if there is not, it will add it to an array of collections stored by the user
+     * @param name
+     */
     public void addCollection(String name)
     {
         for (int i = 0; i < myCollections.size(); i++)
@@ -35,6 +51,10 @@ public class User {
         }
     }
 
+    /**
+     * checks if there are any collections with that desired name already existing, and if there is, it will remove the colleciton from the array stored by the user
+     * @param name
+     */
     public void removeCollection(String name)
     {
         for (int i = 0; i < myCollections.size(); i++)
@@ -48,7 +68,12 @@ public class User {
 
     }
 
-    // compare Users by username
+    // COMPARISON
+    /**
+     * compares Users to the entered username to ensure it is being stored in the correct place
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

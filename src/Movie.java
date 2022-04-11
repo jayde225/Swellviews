@@ -4,6 +4,7 @@ import java.util.*;
  * A class for creating and editing Movie objects
  */
 public class Movie {
+
     //VARIABLES
     String Title;
     Integer Year;
@@ -98,7 +99,12 @@ public class Movie {
      */
     public ArrayList<Ratings> getRatings() { return Ratings; }
 
-    // compare movies by title then year
+    // COMPARISON FUNCTIONS
+    /**
+     * compares movies by title then by year, returning true if and only if they are the same
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
