@@ -2,14 +2,18 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import java.io.*;
+import java.util.concurrent.TimeUnit;
+
 import com.google.gson.*; //import for Gson capabilities
 
 
 public class Home extends JFrame{
 
-    private static int movieCounter;
+    private static int movieCounter = 0;
 
     public static void main(String[] args) {
 
@@ -45,15 +49,40 @@ public class Home extends JFrame{
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
         JButton buttonCollections = new JButton("Collections");
         JButton buttonAccount = new JButton("Account");
-        JButton getMoreMovies = new JButton("Show More");
-            //int movieCounter = 0; ; //Why is this not just an int/final int? *****************************************************
-            getMoreMovies.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent button_pressed) {
-                    movieGridUpdater(homeFrame, CompleteMovieArrayList);
-                }
-            });
 
+        String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
+
+        //MovieDisplay grid layout on homepage:
+        JPanel movieGrid = new JPanel();
+        movieGrid.setLayout(new GridLayout(2,4));
+        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
+
+        JButton getMoreMovies = new JButton("Show More");
+        getMoreMovies.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                movieGrid.removeAll();
+                SwingUtilities.updateComponentTreeUI(homeFrame);
+                movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid);
+            }
+        });
+
+        JButton goBack = new JButton ("Go Back");
+        goBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (movieCounter > 15) {
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieCounter = movieCounter - 16;
+                    movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid);
+                }
+            }
+        });
+
+        JPanel forwardAndBackButtons = new JPanel();
+        forwardAndBackButtons.add(goBack);
+        forwardAndBackButtons.add(getMoreMovies);
 
         //Homepage Header Attributes (added from above)
         JMenuBar header = new JMenuBar();
@@ -70,12 +99,12 @@ public class Home extends JFrame{
 
         homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
 
-        movieGridUpdater(homeFrame,  CompleteMovieArrayList);
+        movieGridUpdater(homeFrame,  CompleteMovieArrayList, movieGrid);
 
         //Positioning homepage frame elements
         homeFrame.add(header, BorderLayout.PAGE_START);
-        homeFrame.add(getMoreMovies, BorderLayout.PAGE_END);
-        homeFrame.setSize(500, 500);
+        homeFrame.add(forwardAndBackButtons, BorderLayout.PAGE_END);
+        homeFrame.setSize(1500, 1000);
         homeFrame.setLocationRelativeTo(null);
 
         //Standard enabling and closing statements
@@ -84,44 +113,111 @@ public class Home extends JFrame{
 
     }
 
-    public static void movieGridUpdater(JFrame home, ArrayList<Movie> movieArrayList){
+    public static void movieGridUpdater(JFrame home, ArrayList<Movie> movieArrayList, JPanel movieGrid){
 
-        String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
+            MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
+            MovieDisplay movie2 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
+            MovieDisplay movie3 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
+            MovieDisplay movie4 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
+            MovieDisplay movie5 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
+            MovieDisplay movie6 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
+            MovieDisplay movie7 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
+            MovieDisplay movie8 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            movieCounter++;
 
-        //MovieDisplay grid layout on homepage:
-        JPanel movieGrid = new JPanel();
-        movieGrid.setLayout(new GridLayout(2,4));
-        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
+            movieGrid.add(movie1);
+            movieGrid.add(movie2);
+            movieGrid.add(movie3);
+            movieGrid.add(movie4);
+            movieGrid.add(movie5);
+            movieGrid.add(movie6);
+            movieGrid.add(movie7);
+            movieGrid.add(movie8);
 
-        MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-        MovieDisplay movie2 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-        MovieDisplay movie3 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-        MovieDisplay movie4 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-        MovieDisplay movie5 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-        MovieDisplay movie6 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-        MovieDisplay movie7 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-        MovieDisplay movie8 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink());
-        movieCounter++;
-
-        movieGrid.add(movie1);
-        movieGrid.add(movie2);
-        movieGrid.add(movie3);
-        movieGrid.add(movie4);
-        movieGrid.add(movie5);
-        movieGrid.add(movie6);
-        movieGrid.add(movie7);
-        movieGrid.add(movie8);
+            movieSelection(movie1,8, movieArrayList);
+            movieSelection(movie2,7, movieArrayList);
+            movieSelection(movie3,6, movieArrayList);
+            movieSelection(movie4,5, movieArrayList);
+            movieSelection(movie5,4, movieArrayList);
+            movieSelection(movie6,3, movieArrayList);
+            movieSelection(movie7,2, movieArrayList);
+            movieSelection(movie8,1, movieArrayList);
 
         home.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
     }
 
+    public static void movieSelection(MovieDisplay movieSelected, int movieNumberInGrid, ArrayList<Movie> movieArrayList){
+
+        int cheating = 1;
+
+        JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - movieNumberInGrid).getTitle());
+        JPanel movieDetailsRightPanel = new JPanel();
+        movieDetailsRightPanel.setLayout(new GridLayout(10,1));
+
+        JLabel movieTitle = new JLabel("Title: " + movieArrayList.get(movieCounter - movieNumberInGrid).getTitle());
+        JLabel movieYear = new JLabel("Year: " + movieArrayList.get(movieCounter - movieNumberInGrid).getYear().toString());
+        JLabel movieGenre = new JLabel("Genre: " + movieArrayList.get(movieCounter - movieNumberInGrid).getGenres());
+        JLabel movieAgeRating = new JLabel("Age Rating: " + movieArrayList.get(movieCounter - movieNumberInGrid).getMPARating());
+        JLabel movieRuntime = new JLabel("Runtime: " + movieArrayList.get(movieCounter - movieNumberInGrid).getRunTime());
+        JLabel movieDirector = new JLabel("Director: " + movieArrayList.get(movieCounter - movieNumberInGrid).getDirector());
+        JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - movieNumberInGrid).getWriters());
+        JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - movieNumberInGrid).getActors());
+        JLabel moviePlot = new JLabel("Plot: " + movieArrayList.get(movieCounter - movieNumberInGrid).getPlot());
+        JLabel movieLanguage = new JLabel();
+        JLabel movieCountry = new JLabel();
+        JLabel movieAwards = new JLabel("Awards: " + movieArrayList.get(movieCounter - movieNumberInGrid).getAwards());
+        JLabel movieRatings = new JLabel();
+        JLabel movieRating = new JLabel();
+
+        movieDetailsRightPanel.add(movieTitle);
+        movieDetailsRightPanel.add(movieGenre);
+        movieDetailsRightPanel.add(movieYear);
+        movieDetailsRightPanel.add(movieAgeRating);
+        movieDetailsRightPanel.add(movieRuntime);
+        movieDetailsRightPanel.add(movieDirector);
+        movieDetailsRightPanel.add(movieWriter);
+        movieDetailsRightPanel.add(movieActors);
+        movieDetailsRightPanel.add(movieAwards);
+        movieDetailsRightPanel.add(moviePlot);
+
+        movieDetailsFrame.setLayout(new GridLayout(1,2));
+        movieDetailsFrame.setSize(600, 550);
+        movieDetailsFrame.setLocationRelativeTo(null);
+
+        movieSelected.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                movieDetailsFrame.add(movieSelected);
+                movieDetailsFrame.add(movieDetailsRightPanel);
+                movieDetailsFrame.setVisible(true);
+            }
+
+            //These shouldn't be needed:
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+    }
 
     public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
 
