@@ -6,7 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
 import java.io.*;
-import java.util.concurrent.TimeUnit;
 
 import com.google.gson.*; //import for Gson capabilities
 
@@ -61,9 +60,9 @@ public class Home extends JFrame{
         getMoreMovies.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                movieGrid.removeAll();
-                SwingUtilities.updateComponentTreeUI(homeFrame);
-                movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid);
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid);
             }
         });
 
@@ -114,48 +113,19 @@ public class Home extends JFrame{
     }
 
     public static void movieGridUpdater(JFrame home, ArrayList<Movie> movieArrayList, JPanel movieGrid){
-
-            MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-            MovieDisplay movie2 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-            MovieDisplay movie3 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-            MovieDisplay movie4 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-            MovieDisplay movie5 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-            MovieDisplay movie6 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-            MovieDisplay movie7 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-            MovieDisplay movie8 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-            movieCounter++;
-
-            movieGrid.add(movie1);
-            movieGrid.add(movie2);
-            movieGrid.add(movie3);
-            movieGrid.add(movie4);
-            movieGrid.add(movie5);
-            movieGrid.add(movie6);
-            movieGrid.add(movie7);
-            movieGrid.add(movie8);
-
-            movieSelection(movie1,8, movieArrayList);
-            movieSelection(movie2,7, movieArrayList);
-            movieSelection(movie3,6, movieArrayList);
-            movieSelection(movie4,5, movieArrayList);
-            movieSelection(movie5,4, movieArrayList);
-            movieSelection(movie6,3, movieArrayList);
-            movieSelection(movie7,2, movieArrayList);
-            movieSelection(movie8,1, movieArrayList);
-
+        for (int counter = 0; counter < 8; counter++) {
+            if (movieArrayList.get(movieCounter) != null) {
+                MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+                movieCounter++;
+                movieGrid.add(movie1);
+                movieSelection(movie1, 1, movieArrayList);
+            }
+        }
         home.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
+
     }
 
     public static void movieSelection(MovieDisplay movieSelected, int movieNumberInGrid, ArrayList<Movie> movieArrayList){
-
-        int cheating = 1;
 
         JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - movieNumberInGrid).getTitle());
         JPanel movieDetailsRightPanel = new JPanel();
@@ -176,6 +146,12 @@ public class Home extends JFrame{
         JLabel movieRatings = new JLabel();
         JLabel movieRating = new JLabel();
 
+        JPanel rateMovieButtons = new JPanel();
+        JButton dislikeMovie = new JButton("Dislike");
+        JButton likeMovie = new JButton("Like");
+        rateMovieButtons.add(dislikeMovie);
+        rateMovieButtons.add(likeMovie);
+
         movieDetailsRightPanel.add(movieTitle);
         movieDetailsRightPanel.add(movieGenre);
         movieDetailsRightPanel.add(movieYear);
@@ -186,15 +162,18 @@ public class Home extends JFrame{
         movieDetailsRightPanel.add(movieActors);
         movieDetailsRightPanel.add(movieAwards);
         movieDetailsRightPanel.add(moviePlot);
+        movieDetailsRightPanel.add(rateMovieButtons);
 
         movieDetailsFrame.setLayout(new GridLayout(1,2));
         movieDetailsFrame.setSize(600, 550);
         movieDetailsFrame.setLocationRelativeTo(null);
 
+        MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter-movieNumberInGrid).getTitle(), movieArrayList.get(movieCounter-movieNumberInGrid).getPosterLink(), 1);
+
         movieSelected.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                movieDetailsFrame.add(movieSelected);
+                movieDetailsFrame.add(movieSelectionDisplay);
                 movieDetailsFrame.add(movieDetailsRightPanel);
                 movieDetailsFrame.setVisible(true);
             }
