@@ -20,7 +20,7 @@ public class Home extends JFrame{
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader("C:\\Users\\gmcop\\IdeaProjects\\Swellviews_Local\\src\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("C:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -43,7 +43,64 @@ public class Home extends JFrame{
         JFrame homeFrame = new JFrame("Swellviews");
         JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
                                                                      //so can search without having to delete default text, or just make label (see accountmenu/login)
+
+        // TEST CODE TO DISPLAY MOVIES BY SEARCH------------------------------------------------------------------
+        //NOTE: I moved buttonSearch to here so I could test out searching
         JButton buttonSearch = new JButton("Search");
+        buttonSearch.addActionListener(new ActionListener() {
+            ArrayList<Movie> searchedForMovies = new ArrayList<Movie>(); //An array list to hold movies that match search criteria
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                System.out.printf("User search term: " + searchField.getText() + '\n');
+                //Since there is no way to tell what category the search term is (horror, title, actor, etc.)
+                //Each attribute will need to be checked individually and the array of movies that match will
+                //need to be checked so it is not put in multiple times maybe(???????)
+                //SEARCH BY TITLE
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (testMovie.Title.contains(searchField.getText())) {
+                        searchedForMovies.add(testMovie);
+                    }
+                }
+                //SEARCH BY GENRE
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (testMovie.Genre.contains(searchField.getText())) {
+                        searchedForMovies.add(testMovie);
+                    }
+                }
+                //SEARCH BY YEAR
+                Integer searchedForYear = Integer.valueOf(searchField.getText());
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (testMovie.Year.equals(searchedForYear)) {
+                        searchedForMovies.add(testMovie);
+                    }
+                }
+                //SEARCH BY DIRECTOR
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (testMovie.Director.contains(searchField.getText())) {
+                        searchedForMovies.add(testMovie);
+                    }
+                }
+                //SEARCH BY ACTORS
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (testMovie.Actors.contains(searchField.getText())) {
+                        searchedForMovies.add(testMovie);
+                    }
+                }
+                //SEARCH BY WRITER
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (testMovie.Writer.contains(searchField.getText())) {
+                        searchedForMovies.add(testMovie);
+                    }
+                }
+                //Print out the titles of the found movies
+                for (Movie testMovie : searchedForMovies) {
+                    System.out.printf("Movie found! " + '\n' + testMovie.getTitle() + '\n' + '\n');
+                }
+                searchedForMovies.removeAll(searchedForMovies); //Need to clear the array between each search
+            }
+        });
+        // END TEST CODE FOR SEARCHING ---------------------------------------------------------------------------------------------------
+
         JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
         JButton buttonCollections = new JButton("Collections");
