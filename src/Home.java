@@ -68,9 +68,9 @@ public class Home extends JFrame{
                     }
                 }
                 //SEARCH BY YEAR
-                Integer searchedForYear = Integer.valueOf(searchField.getText());
                 for (Movie testMovie : CompleteMovieArrayList) {
-                    if (testMovie.Year.equals(searchedForYear)) {
+                    String searchedForYear = String.valueOf(testMovie.getYear());
+                    if (searchField.getText().contains(searchedForYear)) {
                         searchedForMovies.add(testMovie);
                     }
                 }
@@ -96,7 +96,13 @@ public class Home extends JFrame{
                 for (Movie testMovie : searchedForMovies) {
                     System.out.printf("Movie found! " + '\n' + testMovie.getTitle() + '\n' + '\n');
                 }
+
+                //NOW DISPLAY MOVIES
+                movieCounter = 0; //Reset movieCounter
+                movieGridUpdater(home, searchedForMovies, movieGrid);
+
                 searchedForMovies.removeAll(searchedForMovies); //Need to clear the array between each search
+
             }
         });
         // END TEST CODE FOR SEARCHING ---------------------------------------------------------------------------------------------------
