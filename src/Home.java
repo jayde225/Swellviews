@@ -26,7 +26,7 @@ public class Home extends JFrame{
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader("C:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("C:\\\\Users\\\\gmcop\\\\IdeaProjects\\\\Swellviews_Local\\\\src\\\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -235,7 +235,7 @@ public class Home extends JFrame{
 
         JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - 1).getTitle());
         JPanel movieDetailsRightPanel = new JPanel();
-        movieDetailsRightPanel.setLayout(new GridLayout(11,1));
+        movieDetailsRightPanel.setLayout(new GridLayout(13,1));
 
         JLabel movieTitle = new JLabel("Title: " + movieArrayList.get(movieCounter - 1).getTitle());
         JLabel movieYear = new JLabel("Year: " + movieArrayList.get(movieCounter - 1).getYear().toString());
@@ -246,7 +246,11 @@ public class Home extends JFrame{
         JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - 1).getWriters());
         JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - 1).getActors());
 
-        JLabel moviePlot = new JLabel ("Plot: " + movieArrayList.get(movieCounter - 1).getPlot());
+        JLabel moviePlotLabel = new JLabel("Plot:");
+        JTextArea moviePlot = new JTextArea (movieArrayList.get(movieCounter - 1).getPlot());
+        moviePlot.setEditable(false);
+        moviePlot.setWrapStyleWord(true);
+        moviePlot.setLineWrap(true);
 
         JLabel movieLanguage = new JLabel();
         JLabel movieCountry = new JLabel();
@@ -260,6 +264,8 @@ public class Home extends JFrame{
         rateMovieButtons.add(dislikeMovie);
         rateMovieButtons.add(likeMovie);
 
+        JButton addToCollection = new JButton("Add to Collection");
+
         movieDetailsRightPanel.add(movieTitle);
         movieDetailsRightPanel.add(movieGenre);
         movieDetailsRightPanel.add(movieYear);
@@ -269,8 +275,10 @@ public class Home extends JFrame{
         movieDetailsRightPanel.add(movieWriter);
         movieDetailsRightPanel.add(movieActors);
         movieDetailsRightPanel.add(movieAwards);
+        movieDetailsRightPanel.add(moviePlotLabel);
         movieDetailsRightPanel.add(moviePlot);
         movieDetailsRightPanel.add(rateMovieButtons);
+        movieDetailsRightPanel.add(addToCollection);
 
         movieDetailsFrame.setLayout(new GridLayout(1,2));
         movieDetailsFrame.setSize(700, 550);
