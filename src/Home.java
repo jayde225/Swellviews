@@ -3,13 +3,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.lang.model.type.NullType;
 import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 import java.io.*;
-
 import com.google.gson.*; //import for Gson capabilities
-
 
 public class Home extends JFrame{
 
@@ -18,6 +14,27 @@ public class Home extends JFrame{
     private static int movieListEnd = 0;
 
     public static void main(String[] args) {
+        //GSON IMPLEMENTATION CODE
+        String jsonString = "";
+        Scanner inFile = null;
+        try {
+            inFile = new Scanner(new FileReader("C:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
+        } catch (FileNotFoundException fe) {
+            System.out.println("The file could not be opened.");
+            System.exit(0);
+        }
+
+        // Build the jsonString object line by line
+        while (inFile.hasNextLine()) {
+            jsonString = jsonString + inFile.nextLine();
+        }
+
+        Gson gson = new Gson();
+        Movie[] movieList;  //A java primitive of Movie class
+        ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
+        movieList = gson.fromJson(jsonString, Movie[].class);
+        Collections.addAll(CompleteMovieArrayList, movieList);
+
 
         //GSON IMPLEMENTATION CODE--------------------------------------------------------------------------------------
         String jsonString = "";
