@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.lang.model.type.NullType;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,9 +12,9 @@ import com.google.gson.*; //import for Gson capabilities
 
 public class Home extends JFrame{
 
-    private static int movieCounter = 0;
-    private static int movieEnd = 0;
-    private static int movieListEnd = 0;
+    private static int movieCounter = 0; // Used by movieGridUpdator to know where in the ArrayList we are
+    private static int movieEnd = 0; // Used when the movieGrid has less than 8 MovieDisplays. 8 - number of movies missing = movieEnd which is used in the "Go Back" ActionListener to know how far back to go.
+    private static int movieListEnd = 0; // Used by the "Show More" button ActionListener to know whether there are more movies to show or not
 
     public static void main(String[] args) {
 
@@ -39,79 +38,83 @@ public class Home extends JFrame{
         ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
         movieList = gson.fromJson(jsonString, Movie[].class);
         Collections.addAll(CompleteMovieArrayList, movieList);
+
+        ArrayList<Movie> test = new ArrayList<Movie>();
+        test = CompleteMovieArrayList;
         //--------------END GSON IMPLEMENTATION-------------------------------------------------------------------------
 
         boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
-        JFrame homeFrame = new JFrame("Swellviews");
+        JFrame homeFrame = new JFrame("Swellviews"); // This is the main frame containing the homepage
         JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
-        //so can search without having to delete default text, or just make label (see accountmenu/login)
-        JButton buttonSearch = new JButton("Search");
+                                                                    //so can search without having to delete default text, or just make label (see accountmenu/login)
+        JButton buttonSearch = new JButton("Search"); // Used to search based on the text in the searchField JTextField
         JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
-        JButton buttonCollections = new JButton("Collections");
-        JButton buttonAccount = new JButton("Account");
+        JButton buttonCollections = new JButton("Collections"); // Shows popup on click with existing collections and option to create a new collection
+        JButton buttonAccount = new JButton("Account"); // Shows accountMenu on click with login/logout options
 
         //Homepage Header Attributes (added from above)
-        JMenuBar header = new JMenuBar();
-        header.setLayout(new GridLayout(1, 8));
+        JMenuBar header = new JMenuBar(); // Stores the top components (search bar, search button, filter button, collections button, account button
+        header.setLayout(new GridLayout(1, 8)); // sets the layout of the header to have eight equal spaces for components listed above and below
+        //Adding components to the header JMenuBar:
         header.add(searchField);
         header.add(buttonSearch);
         header.add(spacer);
-        header.add(buttonFilter);//***************************************
+        header.add(buttonFilter);
         header.add(buttonCollections);
         header.add(buttonAccount);
 
-        JPanel forwardAndBackButtons = new JPanel();
+        JPanel forwardAndBackButtons = new JPanel(); //A special panel at the bottom (below movieGrid) for the forward and back buttons controlling the movies shown in the movieGrid.
 
         String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
 
         //MovieDisplay grid layout on homepage:
-        JPanel movieGrid = new JPanel();
-        movieGrid.setLayout(new GridLayout(2,4));
+        JPanel movieGrid = new JPanel(); //Contains movieDisplay objects
+        movieGrid.setLayout(new GridLayout(2,4)); // movieGrid will have two rows and four columns (8 movies MAX)
         movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
-        JButton getMoreMovies = new JButton("Show More");
+        JButton getMoreMovies = new JButton("Show More"); // Moves forward 8 items in the movieGrid
         getMoreMovies.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                if (movieListEnd == 0) {
-                    movieGrid.removeAll();
-                    SwingUtilities.updateComponentTreeUI(homeFrame);
-                    movieGridUpdater(homeFrame, forwardAndBackButtons, CompleteMovieArrayList, movieGrid);
+                if (movieListEnd == 0) { //movieListEnd will be 1 if there are no more movies in the ArrayList
+                    movieGrid.removeAll(); //removes existing items from the movieGrid to make room for new items
+                    SwingUtilities.updateComponentTreeUI(homeFrame); //Refreshes movieGrid to get rid of removed items
+                    movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid); //Calls movieGridUpdator to show the next 8 items
                 }
             }
         });
 
-        JButton goBack = new JButton ("Go Back");
+        JButton goBack = new JButton ("Go Back"); // Moves backwards 8 (or less if on last page) items in the movieGrid
         goBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (movieCounter > 15) {
-                    movieGrid.removeAll();
-                    SwingUtilities.updateComponentTreeUI(homeFrame);
-                    movieCounter = movieCounter - 16 + movieEnd;
-                    movieGridUpdater(homeFrame, forwardAndBackButtons, CompleteMovieArrayList, movieGrid);
-                    movieEnd = 0;
-                    movieListEnd = 0;
+                if (movieCounter > 15-movieEnd) { //Ensures the movieGrid cannot go past the beginning of the ArrayList
+                    movieGrid.removeAll(); //removes existing items from the movieGrid to make room for new items
+                    SwingUtilities.updateComponentTreeUI(homeFrame); //Refreshes movieGrid to get rid of removed items
+                    movieCounter = movieCounter - 16 + movieEnd; // Subtracts 16 (+movieEnd if the last page shown had less then 8 movies) to go backward one page in the Arraylist
+                    movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid); // Calls movieGridUpdator to show the last 8 items
+                    movieEnd = 0; // Resets movieEnd to default 0 (movieEnd is used when the last page has fewer than 8 movies).
+                    movieListEnd = 0; // Resets moveListEnd to default 0 (means there are more movies to be shown) because the movieGrid has gone backwards
                 }
             }
         });
 
-        forwardAndBackButtons.add(goBack);
-        forwardAndBackButtons.add(getMoreMovies);
+        forwardAndBackButtons.add(goBack); //Adds the "Go Back" button to the bottom panel (Left Side)
+        forwardAndBackButtons.add(getMoreMovies); //Adds the "Show More" button to the bottom panel (Right side)
 
         accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
 
         homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
 
-        movieGridUpdater(homeFrame, forwardAndBackButtons, CompleteMovieArrayList, movieGrid);
+        movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid); // Initial call to MovieGridUpdator, shows the first page of movies on startup
 
         //Positioning homepage frame elements
         homeFrame.add(header, BorderLayout.PAGE_START);
         homeFrame.add(forwardAndBackButtons, BorderLayout.PAGE_END);
-        homeFrame.setSize(1500, 1000);
+        homeFrame.setSize(1500, 1000); //Initial size of homeFrame on program startup
         homeFrame.setLocationRelativeTo(null);
 
         //Standard enabling and closing statements
@@ -120,39 +123,52 @@ public class Home extends JFrame{
 
     }
 
-    public static void movieGridUpdater(JFrame home, JPanel forwardAndBackButtons, ArrayList<Movie> movieArrayList, JPanel movieGrid){
+    /**
+     *Updates the movieGrid with new MovieDisplay objects from an ArrayList of Movie objects. Uses static int movieCounter to know what movies from the ArrayList to display.
+     * @param home The JFrame to be used (should always be homeFrame in current version)
+     * @param movieArrayList The ArrayList of Movie objects to display
+     * @param movieGrid The JPanel destination for the MovieDisplay objects (should always be movieGrid in current version)
+     */
+    public static void movieGridUpdater(JFrame home, ArrayList<Movie> movieArrayList, JPanel movieGrid){
 
-        Iterator e = movieArrayList.iterator();
-        int iteratorCounter = 0;
+        Iterator e = movieArrayList.iterator(); // Used to iterate though list, ensuring the next movie exists
+        int iteratorCounter = 0; //Used to count the number of iterations being
 
+        // Catches up to where in the ArrayList the movieGrid is by using the static int movieCounter
         while(movieCounter > iteratorCounter) {
-            e.next();
-            iteratorCounter++;
+            e.next(); //Gets the next item in movieArrayList
+            iteratorCounter++; //Increments the iteratorCounter
         }
 
-        for (int counter = 0; counter < 8; counter++) {
-            if (e.hasNext()) {
-                MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
-                movieCounter++;
-                movieGrid.add(movie1);
-                movieSelection(movie1, movieArrayList);
-                e.next();
+        for (int counter = 0; counter < 8; counter++) { //Loops 8 times at max (movieGrid can only display 8 items at once)
+            if (e.hasNext()) { // Checks if the ArrayList has ended or not
+                MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1); //Creates a new MovieDisplay object for the next movie in the ArrayList
+                movieCounter++; //Increments movieCounter
+                movieGrid.add(movie1); //Adds the MovieDisplay object to the movieGrid for display
+                movieSelection(movie1, movieArrayList); //Creates an ActionListener for the MovieDisplay and prepares the details
+                e.next(); //Finds the next movie in the ArrayList
             }
-            else {
-                movieEnd = 8 - counter;
-                movieListEnd = 1;
-                break;
+            else { //If the ArrayList is at the end:
+                movieEnd = 8 - counter; // Sets the static movieEnd int to the number of movies NOT shown, used in the "Go Back" button ActionListener
+                movieListEnd = 1; // Sets static movieListEnd to 1 so that the "Show More" button cannot continue past the end of the ArrayList
+                break; //Exits loop if there are no more movies in the ArrayList
             }
         }
-        home.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
+        home.add(movieGrid, BorderLayout.CENTER); //Adds updated movieGrid to center of homepage
     }
 
+    /**
+     * Creates MouseListeners for each MovieDisplay object currently being shown in the movieGrid. On Click, a new frame is shown with the details and rating buttons of the Movie object connected to the MovieDisplay object
+     * @param movieSelected MovieDisplay object sent by the movieGridUpdator (should be called "movie1")
+     * @param movieArrayList The ArrayList of Movie objects being displayed
+     */
     public static void movieSelection(MovieDisplay movieSelected, ArrayList<Movie> movieArrayList){
 
-        JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - 1).getTitle());
-        JPanel movieDetailsRightPanel = new JPanel();
-        movieDetailsRightPanel.setLayout(new GridLayout(11,1));
+        JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - 1).getTitle()); //JFrame for displaying Movie object Details. Subtracts 1 from movieCounter because movieCounter is incremented before the method is called.
+        JPanel movieDetailsRightPanel = new JPanel(); // JPanel used for containing movie details provided by the Movie class
+        movieDetailsRightPanel.setLayout(new GridLayout(12,1)); // Sets JPanel above to have 12 rows for displaying details (1 row for each detail)
 
+        //Creating JLabels for each Movie object detail provided by the Movie class
         JLabel movieTitle = new JLabel("Title: " + movieArrayList.get(movieCounter - 1).getTitle());
         JLabel movieYear = new JLabel("Year: " + movieArrayList.get(movieCounter - 1).getYear().toString());
         JLabel movieGenre = new JLabel("Genre: " + movieArrayList.get(movieCounter - 1).getGenres());
@@ -161,21 +177,25 @@ public class Home extends JFrame{
         JLabel movieDirector = new JLabel("Director: " + movieArrayList.get(movieCounter - 1).getDirector());
         JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - 1).getWriters());
         JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - 1).getActors());
-
-        JLabel moviePlot = new JLabel ("Plot: " + movieArrayList.get(movieCounter - 1).getPlot());
-
         JLabel movieLanguage = new JLabel();
         JLabel movieCountry = new JLabel();
         JLabel movieAwards = new JLabel("Awards: " + movieArrayList.get(movieCounter - 1).getAwards());
         JLabel movieRatings = new JLabel();
         JLabel movieRating = new JLabel();
+        JLabel moviePlotLabel = new JLabel("Plot:");
+        JTextArea moviePlot = new JTextArea (movieArrayList.get(movieCounter - 1).getPlot());
+        moviePlot.setEditable(false);
+        moviePlot.setWrapStyleWord(true);
+        moviePlot.setLineWrap(true);
 
-        JPanel rateMovieButtons = new JPanel();
-        JButton dislikeMovie = new JButton("Dislike");
-        JButton likeMovie = new JButton("Like");
-        rateMovieButtons.add(dislikeMovie);
-        rateMovieButtons.add(likeMovie);
+        //Rating Buttons:
+        JPanel rateMovieButtons = new JPanel(); //JPanel containing Like and Dislike buttons declared below. Will be in the bottom row of movieDetailsRightPanel.
+        JButton dislikeMovie = new JButton("Dislike"); //Dislike Button
+        JButton likeMovie = new JButton("Like");       //Like Button
+        rateMovieButtons.add(dislikeMovie);                //Adds Dislike button to rateMovieButtons JPanel
+        rateMovieButtons.add(likeMovie);                   //Adds Like button to rateMovieButtons JPanel
 
+        //Adding movie details and rateMovieButtons into movieDetailsRightPanel JPanel
         movieDetailsRightPanel.add(movieTitle);
         movieDetailsRightPanel.add(movieGenre);
         movieDetailsRightPanel.add(movieYear);
@@ -185,16 +205,18 @@ public class Home extends JFrame{
         movieDetailsRightPanel.add(movieWriter);
         movieDetailsRightPanel.add(movieActors);
         movieDetailsRightPanel.add(movieAwards);
+        movieDetailsRightPanel.add(moviePlotLabel);
         movieDetailsRightPanel.add(moviePlot);
-        movieDetailsRightPanel.add(rateMovieButtons);
+        movieDetailsRightPanel.add(rateMovieButtons); //Contains Like and Dislike buttons
 
-        movieDetailsFrame.setLayout(new GridLayout(1,2));
+        //Setting movieDetailsFrame layout, size, and location:
+        movieDetailsFrame.setLayout(new GridLayout(1,2)); //Left column contains MovieDisplay, Right column contains movieDetailsRightPanel
         movieDetailsFrame.setSize(700, 550);
         movieDetailsFrame.setLocationRelativeTo(null);
 
-        MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter-1).getTitle(), movieArrayList.get(movieCounter-1).getPosterLink(), 1);
+        MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter-1).getTitle(), movieArrayList.get(movieCounter-1).getPosterLink(), 1); //Calls the method to re-ready the ActionListener and movie details JFrame. Otherwise, it is lost.
 
-        movieSelected.addMouseListener(new MouseListener() {
+        movieSelected.addMouseListener(new MouseListener() { //Listens to MovieDisplay object in the movieGrid and displays movieDetailsFrame on Click
             @Override
             public void mouseClicked(MouseEvent e) {
                 movieDetailsFrame.add(movieSelectionDisplay);
@@ -221,6 +243,7 @@ public class Home extends JFrame{
             }
         });
     }
+
 
     public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
 
@@ -276,6 +299,11 @@ public class Home extends JFrame{
         } );*/ /** Logout (Unfinished) */
     }
 
+
+    /**
+     * Creates an ActionListener on a JButton that will open the collectionMenu JPopupMenu (also contained in this method) containing the list of created Collections and an option to create a new collection.
+     * @param buttonCollections JButton that will open the collectionMenu
+     */
     public static void collectionMenu (JButton buttonCollections) {
 
         JPopupMenu collectionMenu = new JPopupMenu(); // Main popup for list of collections
@@ -286,9 +314,9 @@ public class Home extends JFrame{
         createNewCollection.setResizable(false); // Makes the window non-resizable
 
         //Button for creating a new collection:
-        JButton createCollection = new JButton("Create a New Collection");
+        JButton createCollection = new JButton("Create a New Collection"); //Attached to ActionListener below, used to create a new Collection
 
-        //Creating items for the collectionMenu list:
+        //Creating test items for the collectionMenu list:
         JMenuItem testItem1 = new JMenuItem("Test Item 1");
         JMenuItem testItem2 = new JMenuItem("Test Item 123456789");
 
@@ -308,6 +336,7 @@ public class Home extends JFrame{
         createNewCollectionPanel.add(collectionNameField);
         createNewCollectionPanel.add(collectionCreate);
 
+        //Setting size and location of popup menu
         createNewCollection.setSize(310, 100);
         createNewCollection.setLocationRelativeTo(null);
 

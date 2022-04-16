@@ -13,10 +13,16 @@ import javax.swing.*;
 
 public class MovieDisplay extends JPanel{
 
-    private String movieName;
-    private String moviePoster;
-    private int showMovieTitle;
+    private String movieName; //Contains movie title
+    private String moviePoster; //Contains movie poster link
+    private int showMovieTitle; //Currently unused. 1 = show title, 0 = do not show title
 
+    /**
+     * Creates a MovieDisplay object used to display movie posters and titles
+     * @param name Movie Title (String)
+     * @param poster Movie Poster Link (String)
+     * @param showTitle Int. 1 = show movie title, 0 = do not show movie title
+     */
     public MovieDisplay(String name, String poster, int showTitle) {
         this.movieName = name; this.moviePoster = poster; this.showMovieTitle = showTitle;
     }
@@ -36,10 +42,6 @@ public class MovieDisplay extends JPanel{
             g2d.setColor(Color.darkGray);
             g2d.setFont(new Font("Missing Image Questionmark", Font.BOLD, 350));
             g2d.drawString("?",40,330);
-            if(showMovieTitle == 1) {
-                g2d.setFont(new Font("Movie Title W/O Poster", Font.PLAIN, 30));
-                g2d.drawString(this.movieName, 0, 470);
-            }
         }
         else {
             URL url = null;
@@ -54,10 +56,19 @@ public class MovieDisplay extends JPanel{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            g2d.drawImage(movie_image, 0, 0, null);
-            if (showMovieTitle == 1) {
-                g2d.setFont(new Font("Movie Title W/ Poster", Font.PLAIN, 30));
-                g2d.drawString(this.movieName, movie_image.getMinX(), movie_image.getHeight() + 30);
+            g2d.drawImage(movie_image.getScaledInstance(300,440,Image.SCALE_DEFAULT), 0, 0, null);
+        }
+
+        if(showMovieTitle == 1) {
+
+            g2d.setFont(new Font("Movie Title", Font.PLAIN, 30));
+
+            if (movieName.length() > 25){
+                String movieNameCondensed = movieName.substring(0,20) + "...";
+                g2d.drawString(movieNameCondensed, 0, 470);
+            }
+            else {
+                g2d.drawString(this.movieName, 0, 470);
             }
         }
 
