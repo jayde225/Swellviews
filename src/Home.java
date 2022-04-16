@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.lang.model.type.NullType;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -13,6 +14,11 @@ import com.google.gson.*; //import for Gson capabilities
 public class Home extends JFrame{
 
     private static int movieCounter = 0;
+    private static int movieEnd = 0;
+    private static int movieListEnd = 0;
+    private static ArrayList<Movie> arrayListName = new ArrayList<Movie>();
+
+    private static int darkMode = 0;
 
     public static void main(String[] args) {
 
@@ -36,115 +42,20 @@ public class Home extends JFrame{
         ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
         movieList = gson.fromJson(jsonString, Movie[].class);
         Collections.addAll(CompleteMovieArrayList, movieList);
+
+        arrayListName = CompleteMovieArrayList;
         //--------------END GSON IMPLEMENTATION-------------------------------------------------------------------------
 
         boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
         JFrame homeFrame = new JFrame("Swellviews");
         JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
-                                                                     //so can search without having to delete default text, or just make label (see accountmenu/login)
-
-        // TEST CODE TO DISPLAY MOVIES BY SEARCH------------------------------------------------------------------
-        //NOTE: I moved buttonSearch to here so I could test out searching
+        //so can search without having to delete default text, or just make label (see accountmenu/login)
         JButton buttonSearch = new JButton("Search");
-        buttonSearch.addActionListener(new ActionListener() {
-            ArrayList<Movie> searchedForMovies = new ArrayList<Movie>(); //An array list to hold movies that match search criteria
-            @Override
-            public void actionPerformed(ActionEvent button_pressed) {
-                System.out.printf("User search term: " + searchField.getText() + '\n');
-                //Since there is no way to tell what category the search term is (horror, title, actor, etc.)
-                //Each attribute will need to be checked individually and the array of movies that match will
-                //need to be checked so it is not put in multiple times maybe(???????)
-                //SEARCH BY TITLE
-                for (Movie testMovie : CompleteMovieArrayList) {
-                    if (testMovie.Title.contains(searchField.getText())) {
-                        searchedForMovies.add(testMovie);
-                    }
-                }
-                //SEARCH BY GENRE
-                for (Movie testMovie : CompleteMovieArrayList) {
-                    if (testMovie.Genre.contains(searchField.getText())) {
-                        searchedForMovies.add(testMovie);
-                    }
-                }
-                //SEARCH BY YEAR
-                for (Movie testMovie : CompleteMovieArrayList) {
-                    String searchedForYear = String.valueOf(testMovie.getYear());
-                    if (searchField.getText().contains(searchedForYear)) {
-                        searchedForMovies.add(testMovie);
-                    }
-                }
-                //SEARCH BY DIRECTOR
-                for (Movie testMovie : CompleteMovieArrayList) {
-                    if (testMovie.Director.contains(searchField.getText())) {
-                        searchedForMovies.add(testMovie);
-                    }
-                }
-                //SEARCH BY ACTORS
-                for (Movie testMovie : CompleteMovieArrayList) {
-                    if (testMovie.Actors.contains(searchField.getText())) {
-                        searchedForMovies.add(testMovie);
-                    }
-                }
-                //SEARCH BY WRITER
-                for (Movie testMovie : CompleteMovieArrayList) {
-                    if (testMovie.Writer.contains(searchField.getText())) {
-                        searchedForMovies.add(testMovie);
-                    }
-                }
-                //Print out the titles of the found movies
-                for (Movie testMovie : searchedForMovies) {
-                    System.out.printf("Movie found! " + '\n' + testMovie.getTitle() + '\n' + '\n');
-                }
-
-                //NOW DISPLAY MOVIES
-                movieCounter = 0; //Reset movieCounter
-                movieGridUpdater(home, searchedForMovies, movieGrid);
-
-                searchedForMovies.removeAll(searchedForMovies); //Need to clear the array between each search
-
-            }
-        });
-        // END TEST CODE FOR SEARCHING ---------------------------------------------------------------------------------------------------
-
         JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
         JButton buttonCollections = new JButton("Collections");
         JButton buttonAccount = new JButton("Account");
-
-        String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
-
-        //MovieDisplay grid layout on homepage:
-        JPanel movieGrid = new JPanel();
-        movieGrid.setLayout(new GridLayout(2,4));
-        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
-
-        JButton getMoreMovies = new JButton("Show More");
-        getMoreMovies.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent button_pressed) {
-                    movieGrid.removeAll();
-                    SwingUtilities.updateComponentTreeUI(homeFrame);
-                    movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid);
-            }
-        });
-
-        JButton goBack = new JButton ("Go Back");
-        goBack.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (movieCounter > 15) {
-                    movieGrid.removeAll();
-                    SwingUtilities.updateComponentTreeUI(homeFrame);
-                    movieCounter = movieCounter - 16;
-                    movieGridUpdater(homeFrame, CompleteMovieArrayList, movieGrid);
-                }
-            }
-        });
-
-        JPanel forwardAndBackButtons = new JPanel();
-        forwardAndBackButtons.add(goBack);
-        forwardAndBackButtons.add(getMoreMovies);
 
         //Homepage Header Attributes (added from above)
         JMenuBar header = new JMenuBar();
@@ -156,12 +67,121 @@ public class Home extends JFrame{
         header.add(buttonCollections);
         header.add(buttonAccount);
 
+        JPanel forwardAndBackButtons = new JPanel();
+
+        String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
+
+        //MovieDisplay grid layout on homepage:
+        JPanel movieGrid = new JPanel();
+        movieGrid.setLayout(new GridLayout(2,4));
+        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
+
+        // TEST CODE TO DISPLAY MOVIES BY SEARCH------------------------------------------------------------------
+        //NOTE: I moved buttonSearch to here so I could test out searching
+        buttonSearch.addActionListener(new ActionListener() {
+            ArrayList<Movie> searchedForMovies = new ArrayList<Movie>(); //An array list to hold movies that match search criteria
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                searchedForMovies.removeAll(searchedForMovies);
+                //Since there is no way to tell what category the search term is (horror, title, actor, etc.)
+                //Each attribute will need to be checked individually and the array of movies that match will
+                //need to be checked so it is not put in multiple times
+                //SEARCH BY TITLE
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Title.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY GENRE
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Genre.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY YEAR
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    String searchedForYear = String.valueOf(testMovie.getYear());
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (searchField.getText().contains(searchedForYear)) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY DIRECTOR
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Director.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY ACTORS
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Actors.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY WRITER
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Writer.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+
+                //Display movies that were found in the search
+                arrayListName = searchedForMovies;
+                movieCounter = 0;
+                movieGrid.removeAll();
+                SwingUtilities.updateComponentTreeUI(homeFrame);
+                movieListEnd = 0;
+                movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+            }
+        });
+
+        JButton getMoreMovies = new JButton("Show More");
+        getMoreMovies.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                if (movieListEnd == 0) {
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+                }
+            }
+        });
+
+        JButton goBack = new JButton ("Go Back");
+        goBack.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (movieCounter > 15-movieEnd) {
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieCounter = movieCounter - 16 + movieEnd;
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+                    movieEnd = 0;
+                    movieListEnd = 0;
+                }
+            }
+        });
+
+        forwardAndBackButtons.add(goBack);
+        forwardAndBackButtons.add(getMoreMovies);
+
         accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
 
         homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
 
-        movieGridUpdater(homeFrame,  CompleteMovieArrayList, movieGrid);
+        movieGridUpdater(homeFrame, forwardAndBackButtons, CompleteMovieArrayList, movieGrid);
 
         //Positioning homepage frame elements
         homeFrame.add(header, BorderLayout.PAGE_START);
@@ -175,37 +195,62 @@ public class Home extends JFrame{
 
     }
 
-    public static void movieGridUpdater(JFrame home, ArrayList<Movie> movieArrayList, JPanel movieGrid){
+    public static void movieGridUpdater(JFrame home, JPanel forwardAndBackButtons, ArrayList<Movie> movieArrayList, JPanel movieGrid){
+
+        if (darkMode == 0){
+            movieGrid.setBackground(null);
+            forwardAndBackButtons.setBackground(null);
+        }
+        else {
+            movieGrid.setBackground(Color.darkGray);
+            forwardAndBackButtons.setBackground(Color.darkGray);
+        }
+
+        Iterator e = movieArrayList.iterator();
+        int iteratorCounter = 0;
+
+        while(movieCounter > iteratorCounter) {
+            e.next();
+            iteratorCounter++;
+        }
+
         for (int counter = 0; counter < 8; counter++) {
-            if (movieArrayList.get(movieCounter) != null) {
-                MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), 1);
+            if (e.hasNext()) {
+                MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), darkMode, 1);
                 movieCounter++;
                 movieGrid.add(movie1);
-                movieSelection(movie1, 1, movieArrayList);
+                movieSelection(movie1, movieArrayList);
+                e.next();
+            }
+            else {
+                movieEnd = 8 - counter;
+                movieListEnd = 1;
+                break;
             }
         }
         home.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
-
     }
 
-    public static void movieSelection(MovieDisplay movieSelected, int movieNumberInGrid, ArrayList<Movie> movieArrayList){
+    public static void movieSelection(MovieDisplay movieSelected, ArrayList<Movie> movieArrayList){
 
-        JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - movieNumberInGrid).getTitle());
+        JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - 1).getTitle());
         JPanel movieDetailsRightPanel = new JPanel();
-        movieDetailsRightPanel.setLayout(new GridLayout(10,1));
+        movieDetailsRightPanel.setLayout(new GridLayout(11,1));
 
-        JLabel movieTitle = new JLabel("Title: " + movieArrayList.get(movieCounter - movieNumberInGrid).getTitle());
-        JLabel movieYear = new JLabel("Year: " + movieArrayList.get(movieCounter - movieNumberInGrid).getYear().toString());
-        JLabel movieGenre = new JLabel("Genre: " + movieArrayList.get(movieCounter - movieNumberInGrid).getGenres());
-        JLabel movieAgeRating = new JLabel("Age Rating: " + movieArrayList.get(movieCounter - movieNumberInGrid).getMPARating());
-        JLabel movieRuntime = new JLabel("Runtime: " + movieArrayList.get(movieCounter - movieNumberInGrid).getRunTime());
-        JLabel movieDirector = new JLabel("Director: " + movieArrayList.get(movieCounter - movieNumberInGrid).getDirector());
-        JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - movieNumberInGrid).getWriters());
-        JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - movieNumberInGrid).getActors());
-        JLabel moviePlot = new JLabel("Plot: " + movieArrayList.get(movieCounter - movieNumberInGrid).getPlot());
+        JLabel movieTitle = new JLabel("Title: " + movieArrayList.get(movieCounter - 1).getTitle());
+        JLabel movieYear = new JLabel("Year: " + movieArrayList.get(movieCounter - 1).getYear().toString());
+        JLabel movieGenre = new JLabel("Genre: " + movieArrayList.get(movieCounter - 1).getGenres());
+        JLabel movieAgeRating = new JLabel("Age Rating: " + movieArrayList.get(movieCounter - 1).getMPARating());
+        JLabel movieRuntime = new JLabel("Runtime: " + movieArrayList.get(movieCounter - 1).getRunTime());
+        JLabel movieDirector = new JLabel("Director: " + movieArrayList.get(movieCounter - 1).getDirector());
+        JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - 1).getWriters());
+        JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - 1).getActors());
+
+        JLabel moviePlot = new JLabel ("Plot: " + movieArrayList.get(movieCounter - 1).getPlot());
+
         JLabel movieLanguage = new JLabel();
         JLabel movieCountry = new JLabel();
-        JLabel movieAwards = new JLabel("Awards: " + movieArrayList.get(movieCounter - movieNumberInGrid).getAwards());
+        JLabel movieAwards = new JLabel("Awards: " + movieArrayList.get(movieCounter - 1).getAwards());
         JLabel movieRatings = new JLabel();
         JLabel movieRating = new JLabel();
 
@@ -228,10 +273,10 @@ public class Home extends JFrame{
         movieDetailsRightPanel.add(rateMovieButtons);
 
         movieDetailsFrame.setLayout(new GridLayout(1,2));
-        movieDetailsFrame.setSize(600, 550);
+        movieDetailsFrame.setSize(700, 550);
         movieDetailsFrame.setLocationRelativeTo(null);
 
-        MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter-movieNumberInGrid).getTitle(), movieArrayList.get(movieCounter-movieNumberInGrid).getPosterLink(), 1);
+        MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter-1).getTitle(), movieArrayList.get(movieCounter-1).getPosterLink(), darkMode, 1);
 
         movieSelected.addMouseListener(new MouseListener() {
             @Override
@@ -285,6 +330,18 @@ public class Home extends JFrame{
         if(loggedIn == true) {accountmenu.add(logoutB);}       // If logged in, show logout menu
         else{accountmenu.add(loginmenu);}     // If logged out, show login menu
 
+        JMenuItem darkModeToggle = new JMenuItem("Toggle Dark Mode");
+        accountmenu.add(darkModeToggle);
+
+        darkModeToggle.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (darkMode == 0){darkMode = 1;}
+                else {darkMode = 0;}
+
+            }
+        });
+
         buttonAccount.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
@@ -293,20 +350,19 @@ public class Home extends JFrame{
         });
 
         enterB.addActionListener( new ActionListener() { /** No functionality Currently */
-            public void actionPerformed(ActionEvent button_pressed) {
-                //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
-                javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
-                //once closes, initiate login procedure
-                //how use enter key OR click to submit
-                //need error handling (not close) for incorrect login, create account
-                // or to show login successful
-            }
+        public void actionPerformed(ActionEvent button_pressed) {
+            //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
+            javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
+            //once closes, initiate login procedure
+            //how use enter key OR click to submit
+            //need error handling (not close) for incorrect login, create account
+            // or to show login successful
+        }
         } );
 
         /*logoutB.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 logoutmenu.show(logoutB, logoutB.getWidth(), logoutB.getHeight());
-
                 //This will need to do the logout procedure, what ever that looks like ***************
                 //will also need to close menu and somehow make loggedIn = false; again
                 //since menu item, will not use action listener and will need to act
@@ -315,14 +371,16 @@ public class Home extends JFrame{
         } );*/ /** Logout (Unfinished) */
     }
 
+    //public static void darkModeUpdator (JFrame home, JPanel movieGrid );
+
     public static void collectionMenu (JButton buttonCollections) {
 
         JPopupMenu collectionMenu = new JPopupMenu(); // Main popup for list of collections
         JFrame createNewCollection = new JFrame("Create a New Collection"); //"Popup" window for entering the name of a new collection
-            JPanel createNewCollectionPanel = new JPanel(); //Needed for BoxLayout
-            createNewCollection.add(createNewCollectionPanel);
-            createNewCollectionPanel.setLayout(new BoxLayout(createNewCollectionPanel, BoxLayout.Y_AXIS)); // BoxLayout is simple to organize elements in a column
-            createNewCollection.setResizable(false); // Makes the window non-resizable
+        JPanel createNewCollectionPanel = new JPanel(); //Needed for BoxLayout
+        createNewCollection.add(createNewCollectionPanel);
+        createNewCollectionPanel.setLayout(new BoxLayout(createNewCollectionPanel, BoxLayout.Y_AXIS)); // BoxLayout is simple to organize elements in a column
+        createNewCollection.setResizable(false); // Makes the window non-resizable
 
         //Button for creating a new collection:
         JButton createCollection = new JButton("Create a New Collection");
@@ -339,7 +397,7 @@ public class Home extends JFrame{
         //Creating items for the createNewCollection popup:
         JLabel collectionNameLabel = new JLabel("Enter Collection Name:");
         JTextField collectionNameField = new JTextField("New Collection");
-            collectionNameField.setSize(100,10);
+        collectionNameField.setSize(100,10);
         JButton collectionCreate = new JButton ("Create");
 
         //Adding items to the createNewCollection popup:
