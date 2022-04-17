@@ -20,6 +20,8 @@ public class Home extends JFrame{
 
     private static int darkMode = 0;
 
+    static JButton buttonApply = new JButton("Apply Filters");
+
     public static void main(String[] args) {
 
         //GSON IMPLEMENTATION CODE--------------------------------------------------------------------------------------
@@ -143,6 +145,15 @@ public class Home extends JFrame{
                 SwingUtilities.updateComponentTreeUI(homeFrame);
                 movieListEnd = 0;
                 movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+            }
+        });
+
+
+        buttonApply.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                System.out.printf("Filters have been applied \n");
+                //Go through each criteria and check the entire database for matching movies
             }
         });
 
@@ -491,7 +502,6 @@ public class Home extends JFrame{
         JCheckBox genreHistory= new JCheckBox("History");
 
         JButton buttonClear = new JButton("Clear Filters");
-        JButton buttonApply = new JButton("Apply Filters");
 
         filterBox.add(buttonClear);
 
@@ -533,17 +543,6 @@ public class Home extends JFrame{
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 filterPopupMenu.show(buttonFilter, buttonFilter.getHorizontalAlignment(),buttonFilter.getHeight());
-            }
-        });
-
-        buttonApply.addActionListener( new ActionListener() {
-            ArrayList<Movie> searchedForMovies = new ArrayList<Movie>(); //An array list to hold movies that match filter criteria
-            @Override
-            public void actionPerformed(ActionEvent button_pressed) {
-                System.out.printf("Filters have been applied \n");
-                //Go through each criteria and check the complete movie database for movies that match. Check if the movie is
-                //already in the ArrayList and do not add it again if it is.
-
             }
         });
 
