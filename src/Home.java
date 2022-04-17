@@ -356,9 +356,6 @@ public class Home extends JFrame{
                 }
 
                 //Display movies that were found in the search
-                for (Movie testMovie : filteredMovies) {
-                    System.out.printf("This movie is called: " + testMovie.getTitle() + '\n');
-                }
                 arrayListName = filteredMovies;
                 movieCounter = 0;
                 movieGrid.removeAll();
