@@ -215,7 +215,7 @@ public class Home extends JFrame{
                         if ((testMovie.Rated.equals("R") || testMovie.Rated.equals("TV-MA") || testMovie.Rated.equals("X")) && ratedR.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Rated R"
                         }
-                        if (testMovie.getMPARating().equals("Not rated") && ratedUR.isSelected()) {
+                        if (testMovie.getMPARating().equals("Not Rated") && ratedUR.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Unrated/Not rated"
                         }
                     }
