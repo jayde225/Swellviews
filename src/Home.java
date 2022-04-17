@@ -26,7 +26,7 @@ public class Home extends JFrame{
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader("C:\\\\Users\\\\gmcop\\\\IdeaProjects\\\\Swellviews_Local\\\\src\\\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("C:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -178,6 +178,7 @@ public class Home extends JFrame{
 
         accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
+        filterMenu(buttonFilter);
 
         homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
 
@@ -443,5 +444,141 @@ public class Home extends JFrame{
         });
 
 
+    }
+
+
+    //filter: genre, maturity rating, runtime (under 2 hours etc)
+    public static void filterMenu(JButton buttonFilter){
+        JPopupMenu filterPopupMenu = new JPopupMenu();
+        JPanel filterBox = new JPanel();
+        filterBox.setLayout(new BoxLayout(filterBox, BoxLayout.Y_AXIS));
+
+        filterPopupMenu.add(filterBox);
+
+        ButtonGroup filterOptions = new ButtonGroup();
+
+        JLabel runtimeLabel = new JLabel("Runtime:");
+        JCheckBox runtimeShort = new JCheckBox("<30 minutes");
+        JCheckBox runtimeMid = new JCheckBox("<2 hours");
+
+        JLabel ratingFilter = new JLabel("Maturity Rating:");
+        JCheckBox ratedG = new JCheckBox("G");
+        JCheckBox ratedPG = new JCheckBox("PG");
+        JCheckBox ratedPG13 = new JCheckBox("PG-13");
+        JCheckBox ratedR = new JCheckBox("R");
+        JCheckBox ratedUR = new JCheckBox("Unrated");
+
+
+        JLabel genreLabel = new JLabel("Genre:");            ///I think this is all of them lol
+        JCheckBox genreAction = new JCheckBox("Action");
+        JCheckBox genreAdventure = new JCheckBox("Adventure");
+        JCheckBox genreMystery = new JCheckBox("Mystery");
+        JCheckBox genreRomance = new JCheckBox("Romance");
+        JCheckBox genreHorror = new JCheckBox("Horror");
+        JCheckBox genreComedy = new JCheckBox("Comedy");
+        JCheckBox genreDocumentary = new JCheckBox("Documentary");
+        JCheckBox genreDrama = new JCheckBox("Drama");
+        JCheckBox genreShort = new JCheckBox("Short");
+        JCheckBox genreSciFi = new JCheckBox("SciFi");
+        JCheckBox genreCrime = new JCheckBox("Crime");
+        JCheckBox genreThriller = new JCheckBox("Thriller");
+        JCheckBox genreFantasy = new JCheckBox("Fantasy");
+        JCheckBox genreAnimation = new JCheckBox("Animation");
+        JCheckBox genreFamily = new JCheckBox("Family");
+        JCheckBox genreMusical = new JCheckBox("Musical");
+        JCheckBox genreBiography = new JCheckBox("Biography");
+        JCheckBox genreSport = new JCheckBox("Sport");
+        JCheckBox genreHistory= new JCheckBox("History");
+
+        JButton buttonClear = new JButton("Clear Filters");
+        JButton buttonApply = new JButton("Apply Filters");
+
+        filterBox.add(buttonClear);
+
+        filterBox.add(runtimeLabel);
+        filterBox.add(runtimeShort);
+        filterBox.add(runtimeMid);
+
+        filterBox.add(ratingFilter);
+        filterBox.add(ratedG);
+        filterBox.add(ratedPG);
+        filterBox.add(ratedPG13);
+        filterBox.add(ratedR);
+        filterBox.add(ratedUR);
+
+        filterBox.add(genreLabel);
+        filterBox.add(genreAction);
+        filterBox.add(genreAdventure);
+        filterBox.add(genreMystery);
+        filterBox.add(genreRomance);
+        filterBox.add(genreHorror);
+        filterBox.add(genreComedy);
+        filterBox.add(genreDocumentary);
+        filterBox.add(genreDrama);
+        filterBox.add(genreShort);
+        filterBox.add(genreSciFi);
+        filterBox.add(genreCrime);
+        filterBox.add(genreThriller);
+        filterBox.add(genreFantasy);
+        filterBox.add(genreAnimation);
+        filterBox.add(genreFamily);
+        filterBox.add(genreMusical);
+        filterBox.add(genreBiography);
+        filterBox.add(genreSport);
+        filterBox.add(genreHistory);
+
+        filterBox.add(buttonApply);
+
+        buttonFilter.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                filterPopupMenu.show(buttonFilter, buttonFilter.getHorizontalAlignment(),buttonFilter.getHeight());
+            }
+        });
+
+        buttonApply.addActionListener( new ActionListener() {
+            ArrayList<Movie> searchedForMovies = new ArrayList<Movie>(); //An array list to hold movies that match filter criteria
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                System.out.printf("Filters have been applied \n");
+                //Go through each criteria and check the complete movie database for movies that match. Check if the movie is
+                //already in the ArrayList and do not add it again if it is.
+
+            }
+        });
+
+        buttonClear.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                runtimeShort.setSelected(false);
+                runtimeMid.setSelected(false);
+
+                ratedG.setSelected(false);
+                ratedPG.setSelected(false);
+                ratedPG13.setSelected(false);
+                ratedR.setSelected(false);
+                ratedUR.setSelected(false);
+
+                genreAction.setSelected(false);
+                genreAdventure.setSelected(false);
+                genreMystery.setSelected(false);
+                genreRomance.setSelected(false);
+                genreHorror.setSelected(false);
+                genreComedy.setSelected(false);
+                genreDocumentary.setSelected(false);
+                genreDrama.setSelected(false);
+                genreShort.setSelected(false);
+                genreSciFi.setSelected(false);
+                genreCrime.setSelected(false);
+                genreThriller.setSelected(false);
+                genreFantasy.setSelected(false);
+                genreAnimation.setSelected(false);
+                genreFamily.setSelected(false);
+                genreMusical.setSelected(false);
+                genreBiography.setSelected(false);
+                genreSport.setSelected(false);
+                genreHistory.setSelected(false);
+            }
+        });
     }
 }
