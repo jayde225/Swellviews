@@ -22,6 +22,31 @@ public class Home extends JFrame{
 
     static JButton buttonApply = new JButton("Apply Filters");
 
+    static JCheckBox ratedG = new JCheckBox("G");
+    static JCheckBox ratedPG = new JCheckBox("PG");
+    static JCheckBox ratedPG13 = new JCheckBox("PG-13");
+    static JCheckBox ratedR = new JCheckBox("R");
+    static JCheckBox ratedUR = new JCheckBox("Unrated");
+    static JCheckBox genreAction = new JCheckBox("Action");
+    static JCheckBox genreAdventure = new JCheckBox("Adventure");
+    static JCheckBox genreMystery = new JCheckBox("Mystery");
+    static JCheckBox genreRomance = new JCheckBox("Romance");
+    static JCheckBox genreHorror = new JCheckBox("Horror");
+    static JCheckBox genreComedy = new JCheckBox("Comedy");
+    static JCheckBox genreDocumentary = new JCheckBox("Documentary");
+    static JCheckBox genreDrama = new JCheckBox("Drama");
+    static JCheckBox genreShort = new JCheckBox("Short");
+    static JCheckBox genreSciFi = new JCheckBox("SciFi");
+    static JCheckBox genreCrime = new JCheckBox("Crime");
+    static JCheckBox genreThriller = new JCheckBox("Thriller");
+    static JCheckBox genreFantasy = new JCheckBox("Fantasy");
+    static JCheckBox genreAnimation = new JCheckBox("Animation");
+    static JCheckBox genreFamily = new JCheckBox("Family");
+    static JCheckBox genreMusical = new JCheckBox("Musical");
+    static JCheckBox genreBiography = new JCheckBox("Biography");
+    static JCheckBox genreSport = new JCheckBox("Sport");
+    static JCheckBox genreHistory= new JCheckBox("History");
+
     public static void main(String[] args) {
 
         //GSON IMPLEMENTATION CODE--------------------------------------------------------------------------------------
@@ -78,13 +103,12 @@ public class Home extends JFrame{
         movieGrid.setLayout(new GridLayout(2,4));
         movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
-        // TEST CODE TO DISPLAY MOVIES BY SEARCH------------------------------------------------------------------
-        //NOTE: I moved buttonSearch to here so I could test out searching
+        // DISPLAY MOVIES BY SEARCH------------------------------------------------------------------
         buttonSearch.addActionListener(new ActionListener() {
             ArrayList<Movie> searchedForMovies = new ArrayList<Movie>(); //An array list to hold movies that match search criteria
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                searchedForMovies.removeAll(searchedForMovies);
+                searchedForMovies.removeAll(searchedForMovies); //Reset the array
                 //Since there is no way to tell what category the search term is (horror, title, actor, etc.)
                 //Each attribute will need to be checked individually and the array of movies that match will
                 //need to be checked so it is not put in multiple times
@@ -148,12 +172,98 @@ public class Home extends JFrame{
             }
         });
 
-
+        //DISPLAY MOVIES BY USER SELECTED FILTER
         buttonApply.addActionListener( new ActionListener() {
+            ArrayList<Movie> filteredMovies = new ArrayList<Movie>(); //An array list to hold movies that match filter criteria
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                System.out.printf("Filters have been applied \n");
-                //Go through each criteria and check the entire database for matching movies
+                filteredMovies.removeAll(filteredMovies); //Reset the Array
+                //Go through each criteria and check the entire database for matching movies. Check if the movie has already been
+                //added to the list of found movies. If it has, do not add again
+                //FILTER BY RUNTIME
+                /*for (Movie testMovie : CompleteMovieArrayList) {
+                    Integer movieTime;
+                    String tempStore;
+                    if (!filteredMovies.contains(testMovie)) {
+                        //Get runtime of the movie
+                        tempStore = testMovie.getRunTime();
+                        Scanner scan = new Scanner(tempStore);
+                        movieTime = Integer.valueOf(scan.next(tempStore));
+                        if (movieTime < 30) {
+                            filteredMovies.add(testMovie); //Filter: "< 30 Min"
+                        }
+                        if (movieTime < 120) {
+                            filteredMovies.add(testMovie); //Filter: "< 2 Hours"
+                        }
+                        scan.close();
+                    }
+                }*/ //This may have to be scrapped
+
+                //FILTER BY MATURITY RATING
+                //Since movies only have one rating, this can be condensed into one for loop
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!filteredMovies.contains(testMovie)) {
+                        if (testMovie.getMPARating().equals("G") && ratedG.isSelected()) {
+                            filteredMovies.add(testMovie); //Filter: "Rated G"
+                        }
+                        if (testMovie.getMPARating().equals("PG") && ratedPG.isSelected()) {
+                            filteredMovies.add(testMovie); //Filter: "Rated PG"
+                        }
+                        if (testMovie.getMPARating().equals("PG-13") && ratedPG13.isSelected()) {
+                            filteredMovies.add(testMovie); //Filter: "Rated PG-13"
+                        }
+                        if (testMovie.getMPARating().equals("R") && ratedR.isSelected()) {
+                            filteredMovies.add(testMovie); //Filter: "Rated R"
+                        }
+                        if (testMovie.getMPARating().equals("Not rated") && ratedUR.isSelected()) {
+                            filteredMovies.add(testMovie); //Filter: "Unrated/Not rated"
+                        }
+                    }
+                }
+                /*//SEARCH BY YEAR
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    String searchedForYear = String.valueOf(testMovie.getYear());
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (searchField.getText().contains(searchedForYear)) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY DIRECTOR
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Director.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY ACTORS
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Actors.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }
+                //SEARCH BY WRITER
+                for (Movie testMovie : CompleteMovieArrayList) {
+                    if (!searchedForMovies.contains(testMovie)) {
+                        if (testMovie.Writer.contains(searchField.getText())) {
+                            searchedForMovies.add(testMovie);
+                        }
+                    }
+                }*/
+
+                //Display movies that were found in the search
+                for (Movie testMovie : filteredMovies) {
+                    System.out.printf("This movie is called: " + testMovie.getTitle() + '\n');
+                }
+                arrayListName = filteredMovies;
+                movieCounter = 0;
+                movieGrid.removeAll();
+                SwingUtilities.updateComponentTreeUI(homeFrame);
+                movieListEnd = 0;
+                movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
             }
         });
 
@@ -473,33 +583,8 @@ public class Home extends JFrame{
         JCheckBox runtimeMid = new JCheckBox("<2 hours");
 
         JLabel ratingFilter = new JLabel("Maturity Rating:");
-        JCheckBox ratedG = new JCheckBox("G");
-        JCheckBox ratedPG = new JCheckBox("PG");
-        JCheckBox ratedPG13 = new JCheckBox("PG-13");
-        JCheckBox ratedR = new JCheckBox("R");
-        JCheckBox ratedUR = new JCheckBox("Unrated");
-
 
         JLabel genreLabel = new JLabel("Genre:");            ///I think this is all of them lol
-        JCheckBox genreAction = new JCheckBox("Action");
-        JCheckBox genreAdventure = new JCheckBox("Adventure");
-        JCheckBox genreMystery = new JCheckBox("Mystery");
-        JCheckBox genreRomance = new JCheckBox("Romance");
-        JCheckBox genreHorror = new JCheckBox("Horror");
-        JCheckBox genreComedy = new JCheckBox("Comedy");
-        JCheckBox genreDocumentary = new JCheckBox("Documentary");
-        JCheckBox genreDrama = new JCheckBox("Drama");
-        JCheckBox genreShort = new JCheckBox("Short");
-        JCheckBox genreSciFi = new JCheckBox("SciFi");
-        JCheckBox genreCrime = new JCheckBox("Crime");
-        JCheckBox genreThriller = new JCheckBox("Thriller");
-        JCheckBox genreFantasy = new JCheckBox("Fantasy");
-        JCheckBox genreAnimation = new JCheckBox("Animation");
-        JCheckBox genreFamily = new JCheckBox("Family");
-        JCheckBox genreMusical = new JCheckBox("Musical");
-        JCheckBox genreBiography = new JCheckBox("Biography");
-        JCheckBox genreSport = new JCheckBox("Sport");
-        JCheckBox genreHistory= new JCheckBox("History");
 
         JButton buttonClear = new JButton("Clear Filters");
 
