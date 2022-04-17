@@ -13,6 +13,8 @@ import com.google.gson.*; //import for Gson capabilities
 
 public class Home extends JFrame{
 
+    static String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
+
     private static int movieCounter = 0;
     private static int movieEnd = 0;
     private static int movieListEnd = 0;
@@ -68,8 +70,6 @@ public class Home extends JFrame{
         header.add(buttonAccount);
 
         JPanel forwardAndBackButtons = new JPanel();
-
-        String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
 
         //MovieDisplay grid layout on homepage:
         JPanel movieGrid = new JPanel();
@@ -137,6 +137,7 @@ public class Home extends JFrame{
                 }
 
                 //Display movies that were found in the search
+                displayName = "Search Results";
                 arrayListName = searchedForMovies;
                 movieCounter = 0;
                 movieGrid.removeAll();
@@ -197,6 +198,8 @@ public class Home extends JFrame{
 
     public static void movieGridUpdater(JFrame home, JPanel forwardAndBackButtons, ArrayList<Movie> movieArrayList, JPanel movieGrid){
 
+        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
+
         if (darkMode == 0){
             movieGrid.setBackground(null);
             forwardAndBackButtons.setBackground(null);
@@ -246,6 +249,8 @@ public class Home extends JFrame{
         JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - 1).getWriters());
         JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - 1).getActors());
 
+
+
         JLabel moviePlotLabel = new JLabel("Plot:");
         JTextArea moviePlot = new JTextArea (movieArrayList.get(movieCounter - 1).getPlot());
         moviePlot.setEditable(false);
@@ -280,9 +285,28 @@ public class Home extends JFrame{
         movieDetailsRightPanel.add(rateMovieButtons);
         movieDetailsRightPanel.add(addToCollection);
 
+
         movieDetailsFrame.setLayout(new GridLayout(1,2));
         movieDetailsFrame.setSize(700, 550);
         movieDetailsFrame.setLocationRelativeTo(null);
+
+        if (darkMode == 1) {
+            movieTitle.setForeground(Color.white);
+            movieGenre.setForeground(Color.white);
+            movieYear.setForeground(Color.white);
+            movieAgeRating.setForeground(Color.white);
+            movieRuntime.setForeground(Color.white);
+            movieDirector.setForeground(Color.white);
+            movieWriter.setForeground(Color.white);
+            movieActors.setForeground(Color.white);
+            movieAwards.setForeground(Color.white);
+            moviePlotLabel.setForeground(Color.white);
+            movieDetailsFrame.getContentPane().setBackground(Color.darkGray);
+            moviePlot.setBackground(Color.darkGray);
+            moviePlot.setForeground(Color.white);
+            movieDetailsRightPanel.setBackground(Color.darkGray);
+            rateMovieButtons.setBackground(Color.darkGray);
+        }
 
         MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter-1).getTitle(), movieArrayList.get(movieCounter-1).getPosterLink(), darkMode, 1);
 
