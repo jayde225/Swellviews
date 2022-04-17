@@ -392,8 +392,23 @@ public class Home extends JFrame{
             }
         });
 
+
+        JButton goHome = new JButton ("Home");
+        goHome.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                arrayListName = CompleteMovieArrayList;
+                movieCounter = 0;
+                movieGrid.removeAll();
+                SwingUtilities.updateComponentTreeUI(homeFrame);
+                movieListEnd = 0;
+                movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+            }
+        });
+
         forwardAndBackButtons.add(goBack);
         forwardAndBackButtons.add(getMoreMovies);
+        forwardAndBackButtons.add(goHome);
 
         accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
