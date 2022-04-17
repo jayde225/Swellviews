@@ -180,25 +180,6 @@ public class Home extends JFrame{
                 filteredMovies.removeAll(filteredMovies); //Reset the Array
                 //Go through each criteria and check the entire database for matching movies. Check if the movie has already been
                 //added to the list of found movies. If it has, do not add again
-                //FILTER BY RUNTIME
-                /*for (Movie testMovie : CompleteMovieArrayList) {
-                    Integer movieTime;
-                    String tempStore;
-                    if (!filteredMovies.contains(testMovie)) {
-                        //Get runtime of the movie
-                        tempStore = testMovie.getRunTime();
-                        Scanner scan = new Scanner(tempStore);
-                        movieTime = Integer.valueOf(scan.next(tempStore));
-                        if (movieTime < 30) {
-                            filteredMovies.add(testMovie); //Filter: "< 30 Min"
-                        }
-                        if (movieTime < 120) {
-                            filteredMovies.add(testMovie); //Filter: "< 2 Hours"
-                        }
-                        scan.close();
-                    }
-                }*/ //This may have to be scrapped
-
                 //FILTER BY MATURITY RATING
                 //Since movies only have one rating, this can be condensed into one for loop
                 for (Movie testMovie : CompleteMovieArrayList) {
@@ -676,10 +657,7 @@ public class Home extends JFrame{
                 System.out.println(collectionNameField.getText());
             }
         });
-
-
     }
-
 
     //filter: genre, maturity rating, runtime (under 2 hours etc)
     public static void filterMenu(JButton buttonFilter){
@@ -691,10 +669,6 @@ public class Home extends JFrame{
 
         ButtonGroup filterOptions = new ButtonGroup();
 
-        JLabel runtimeLabel = new JLabel("Runtime:");
-        JCheckBox runtimeShort = new JCheckBox("<30 minutes");
-        JCheckBox runtimeMid = new JCheckBox("<2 hours");
-
         JLabel ratingFilter = new JLabel("Maturity Rating:");
 
         JLabel genreLabel = new JLabel("Genre:");            ///I think this is all of them lol
@@ -702,10 +676,6 @@ public class Home extends JFrame{
         JButton buttonClear = new JButton("Clear Filters");
 
         filterBox.add(buttonClear);
-
-        filterBox.add(runtimeLabel);
-        filterBox.add(runtimeShort);
-        filterBox.add(runtimeMid);
 
         filterBox.add(ratingFilter);
         filterBox.add(ratedG);
@@ -747,9 +717,6 @@ public class Home extends JFrame{
         buttonClear.addActionListener( new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                runtimeShort.setSelected(false);
-                runtimeMid.setSelected(false);
-
                 ratedG.setSelected(false);
                 ratedPG.setSelected(false);
                 ratedPG13.setSelected(false);
