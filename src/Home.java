@@ -181,6 +181,92 @@ public class Home extends JFrame{
             }
         });
 
+        //SORT THE MOVIES DISPLAYED
+        buttonApplySort.addActionListener(new ActionListener() {
+            ArrayList<Movie> movieCopy = new ArrayList<Movie>(); //An array list to hold a copy of whatever list in being sorted
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                //Sort whatever the last ArrayList that was used and display to user based off of what they selected
+                movieCopy = (ArrayList<Movie>)arrayListName.clone(); //Clone the array most recently used
+                //Sort alphabetically A-Z
+                if (sortAZ.isSelected()) {
+                    NameCompare nameCompare = new NameCompare();
+                    Collections.sort(movieCopy, nameCompare);
+                    //Display the sorted movies
+                    arrayListName = movieCopy;
+                    movieCounter = 0;
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieListEnd = 0;
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+
+                }
+                //Sort alphabetically Z-A
+                else if (sortZA.isSelected()) {
+                    NameCompare nameCompare = new NameCompare();
+                    Collections.sort(movieCopy, nameCompare);
+                    Collections.reverse(movieCopy);
+                    //Display the sorted movies
+                    arrayListName = movieCopy;
+                    movieCounter = 0;
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieListEnd = 0;
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+                }
+                //Sort by release old-new
+                else if (sortOldNew.isSelected()) {
+                    YearCompare yearCompare = new YearCompare();
+                    Collections.sort(movieCopy, yearCompare);
+                    //Display the sorted movies
+                    arrayListName = movieCopy;
+                    movieCounter = 0;
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieListEnd = 0;
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+                }
+                //Sort by release new-old
+                else if (sortZA.isSelected()) {
+                    YearCompare yearCompare = new YearCompare();
+                    Collections.sort(movieCopy, yearCompare);
+                    Collections.reverse(movieCopy);
+                    //Display the sorted movies
+                    arrayListName = movieCopy;
+                    movieCounter = 0;
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieListEnd = 0;
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+                }
+                //Sort by runtime short-long
+                else if (sortShortLong.isSelected()) {
+                    TimeCompare timeCompare = new TimeCompare();
+                    Collections.sort(movieCopy, timeCompare);
+                    //Display the sorted movies
+                    arrayListName = movieCopy;
+                    movieCounter = 0;
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieListEnd = 0;
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+                }
+                //Sort by runtime long-short
+                else if (sortLongShort.isSelected()) {
+                    TimeCompare timeCompare = new TimeCompare();
+                    Collections.sort(movieCopy, timeCompare);
+                    Collections.reverse(movieCopy);
+                    //Display the sorted movies
+                    arrayListName = movieCopy;
+                    movieCounter = 0;
+                    movieGrid.removeAll();
+                    SwingUtilities.updateComponentTreeUI(homeFrame);
+                    movieListEnd = 0;
+                    movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
+                }
+            }
+        });
+
         //DISPLAY MOVIES BY USER SELECTED FILTER
         buttonApply.addActionListener( new ActionListener() {
             ArrayList<Movie> filteredMovies = new ArrayList<Movie>(); //An array list to hold movies that match filter criteria

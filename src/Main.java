@@ -31,7 +31,7 @@ public class Main {
         Collections.addAll(CompleteMovieArrayList, movieList);
 
         //TEST - PRINT OUT HORROR MOVIES ONLY
-        for (Movie testMovie : CompleteMovieArrayList) {
+        /*for (Movie testMovie : CompleteMovieArrayList) {
            if (testMovie.Genre.contains("Horror")) {
                 System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
             }
@@ -107,6 +107,19 @@ public class Main {
         Collections.reverse(CompleteMovieArrayList);
         for (Movie testMovie : CompleteMovieArrayList) {
             System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + ", " + testMovie.getRunTime() + '\n');
+
+
+        //Sort the copy array and see if it changes the original
+        System.out.printf("PRINT BY MOVIE NAME, A TO Z \n");
+        NameCompare nameCompare = new NameCompare();
+        Collections.sort(copyMovieArrayList, nameCompare);
+        for (Movie testMovie : copyMovieArrayList) {
+            System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
+        }
+        //*******
+        System.out.printf("PRINT THE DATABASE \n");
+        for (Movie testMovie : CompleteMovieArrayList) {
+            System.out.printf("This is the name of the movie object: " + testMovie.getTitle() + '\n');
         }
     }
 }
