@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.lang.model.type.NullType;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,8 +19,8 @@ public class Home extends JFrame{
 
     private static int darkMode = 0;
 
+    //STATIC BUTTONS/CHECKBOXES USED FOR FILTERING THE MOVIE ARRAYLIST
     static JButton buttonApply = new JButton("Apply Filters");
-
     static JCheckBox ratedG = new JCheckBox("G");
     static JCheckBox ratedPG = new JCheckBox("PG");
     static JCheckBox ratedPG13 = new JCheckBox("PG-13");
@@ -47,8 +46,16 @@ public class Home extends JFrame{
     static JCheckBox genreSport = new JCheckBox("Sport");
     static JCheckBox genreHistory= new JCheckBox("History");
 
-    public static void main(String[] args) {
+    //STATIC BUTTONS/CHECKBOXES USED FOR SORTING THE CURRENT MOVIE ARRAYLIST
+    static JButton buttonApplySort = new JButton("Apply Sort");
+    static JRadioButton sortAZ = new JRadioButton("A-Z");
+    static JRadioButton sortZA = new JRadioButton("Z-A");
+    static JRadioButton sortOldNew = new JRadioButton("Oldest to Newest");
+    static JRadioButton sortNewOld = new JRadioButton("Newest to Oldest");
+    static JRadioButton sortShortLong = new JRadioButton("Shortest to Longest");
+    static JRadioButton sortLongShort = new JRadioButton("Longest to Shortest");
 
+    public static void main(String[] args) {
         //GSON IMPLEMENTATION CODE--------------------------------------------------------------------------------------
         String jsonString = "";
         Scanner inFile = null;
@@ -81,6 +88,7 @@ public class Home extends JFrame{
         JButton buttonSearch = new JButton("Search");
         JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
+        JButton buttonSort = new JButton("Sort");
         JButton buttonCollections = new JButton("Collections");
         JButton buttonAccount = new JButton("Account");
 
@@ -90,6 +98,7 @@ public class Home extends JFrame{
         header.add(searchField);
         header.add(buttonSearch);
         header.add(spacer);
+        header.add(buttonSort);
         header.add(buttonFilter);//***************************************
         header.add(buttonCollections);
         header.add(buttonAccount);
@@ -394,6 +403,7 @@ public class Home extends JFrame{
         accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
         filterMenu(buttonFilter);
+        sortMenu(buttonSort);
 
         homeFrame.setLayout(new BorderLayout()); // Sets the homepage frame to a border layout (5 sections: north, south, east, west, and center)
 
@@ -659,6 +669,41 @@ public class Home extends JFrame{
         });
     }
 
+    //Sort by year (oldest to newest, newest to oldest), alphabetically (A-Z, Z-A), or runtime (short to longest, longest to shortest)
+    public static void sortMenu(JButton buttonSort) {
+        JPopupMenu sortPopupMenu = new JPopupMenu();
+        JPanel sortBox = new JPanel();
+        sortBox.setLayout(new BoxLayout(sortBox, BoxLayout.Y_AXIS));
+
+        //Connect JPanel to button
+        sortPopupMenu.add(sortBox);
+
+        //Build the sort option drop-down
+        ButtonGroup sortOptions = new ButtonGroup();
+        JLabel alphabetLabel = new JLabel("Alphabetically:");
+        JLabel yearLabel = new JLabel("Release Year:");
+        JLabel runtimeLabel = new JLabel("Runtime:");
+
+        sortBox.add(alphabetLabel);
+        sortBox.add(sortAZ);
+        sortBox.add(sortZA);
+        sortBox.add(yearLabel);
+        sortBox.add(sortOldNew);
+        sortBox.add(sortNewOld);
+        sortBox.add(runtimeLabel);
+        sortBox.add(sortShortLong);
+        sortBox.add(sortLongShort);
+        sortBox.add(buttonApplySort);
+
+        buttonSort.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                sortPopupMenu.show(buttonSort, buttonSort.getHorizontalAlignment(),buttonSort.getHeight());
+            }
+        });
+
+    }
+
     //filter: genre, maturity rating, runtime (under 2 hours etc)
     public static void filterMenu(JButton buttonFilter){
         JPopupMenu filterPopupMenu = new JPopupMenu();
@@ -670,9 +715,7 @@ public class Home extends JFrame{
         ButtonGroup filterOptions = new ButtonGroup();
 
         JLabel ratingFilter = new JLabel("Maturity Rating:");
-
-        JLabel genreLabel = new JLabel("Genre:");            ///I think this is all of them lol
-
+        JLabel genreLabel = new JLabel("Genre:");
         JButton buttonClear = new JButton("Clear Filters");
 
         filterBox.add(buttonClear);
