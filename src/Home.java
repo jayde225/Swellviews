@@ -227,7 +227,7 @@ public class Home extends JFrame{
                     movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
                 }
                 //Sort by release new-old
-                else if (sortZA.isSelected()) {
+                else if (sortNewOld.isSelected()) {
                     YearCompare yearCompare = new YearCompare();
                     Collections.sort(movieCopy, yearCompare);
                     Collections.reverse(movieCopy);
