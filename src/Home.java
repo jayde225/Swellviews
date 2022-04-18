@@ -192,7 +192,7 @@ public class Home extends JFrame{
                 //Sort whatever the last ArrayList that was used and display to user based off of what they selected
                 movieCopy = (ArrayList<Movie>)arrayListName.clone(); //Clone the array most recently used
                 //Sort alphabetically A-Z
-                /*if (sortAZ.isSelected()) {
+                if (sortAZ.isSelected()) {
                     NameCompare nameCompare = new NameCompare();
                     Collections.sort(movieCopy, nameCompare);
                     //Display the sorted movies
@@ -266,7 +266,7 @@ public class Home extends JFrame{
                     SwingUtilities.updateComponentTreeUI(homeFrame);
                     movieListEnd = 0;
                     movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
-                }*/
+                }
             }
         });
 
