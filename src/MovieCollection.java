@@ -65,4 +65,19 @@ public class MovieCollection {
         } else
             return false;
     }
+
+    /**
+     * checks if the movie exists in collection. if so, then wherever the movie is found is then removed and collection length decreases.returns if adding was successful or not
+     */
+    public boolean removeMovie(Movie inputMovie)
+    {
+        for (int i = 0; i < collectionLength; i++) {
+            if (inputMovie == MovieCollection.get(i)) {
+                MovieCollection.remove(i);
+                collectionLength--;
+                return true;
+            }
+        }
+        return false;
+    }
 }
