@@ -1,3 +1,5 @@
+//DESIGN PATTERN: MovieCollection is modeled after the Composite Pattern since it is responsible for keeping track of a group of movies
+
 import moviemodel.Movie;
 
 import java.util.ArrayList;

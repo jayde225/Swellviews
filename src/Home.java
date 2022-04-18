@@ -1,3 +1,5 @@
+//DESIGN PATTERN: The Home class is modeled after the Observer design pattern. Home uses
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

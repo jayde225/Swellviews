@@ -1,5 +1,6 @@
-package moviemodel;
+//DESIGN PATTERN: Comparator is a part of the Strategy Pattern, so NameCompare is modeled after the Strategy Pattern
 
+package moviemodel;
 import java.util.Comparator;
 import java.util.*;
 
