@@ -1,5 +1,6 @@
+package MovieData;
+
 import java.util.*;
-import java.io.*;
 
 /**
  * A class for creating and editing Movie objects

@@ -1,3 +1,7 @@
+package UserData;
+
+import MovieData.*;
+
 import java.util.Objects;
 
 /**

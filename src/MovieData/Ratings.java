@@ -1,3 +1,5 @@
+package MovieData;
+
 /**
  * A class for creating and storing Ratings objects
  */

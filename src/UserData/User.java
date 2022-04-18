@@ -1,3 +1,7 @@
+package UserData;
+
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -7,8 +11,38 @@ import java.util.Objects;
 public class User {
 
     // VARIABLES
+    // uses expose to explicitly decide which field gets serialized
+    @Expose
     private String username;
+
+    @Expose
+    private String password;
+
+    @Expose
     private ArrayList<UserMovieCollection> myCollections = new ArrayList<UserMovieCollection>();
+
+    private boolean isLoggedIn = false;
+
+    // CONSTRUCTOR
+
+    /**
+     * parameterless constructor is required for GSON deserialization
+     */
+    public User()
+    {
+
+    }
+
+    /**
+     * constructor that sets username and password
+     * @param username
+     * @param password
+     */
+    public User(String username, String password)
+    {
+        this.username = username;
+        this.password = password;
+    }
 
     // GET FUNCTIONS
     /**
@@ -21,12 +55,31 @@ public class User {
     }
 
     /**
+     * returns whether the user is logged in
+     * @return
+     */
+    public boolean getIsLoggedIn() {
+        return isLoggedIn;
+    }
+
+    /**
      * returns the ArrayList of UserMovieColection, myCollecions, of the user object
      * @return
      */
     public ArrayList<UserMovieCollection> getMyCollections()
     {
         return myCollections;
+    }
+
+    /**
+     * authenticates the user using a password
+     * @param password
+     * @return
+     */
+    public boolean logIn(String password)
+    {
+        isLoggedIn = this.password.equals(password);
+        return isLoggedIn;
     }
 
 

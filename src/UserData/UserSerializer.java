@@ -1,3 +1,5 @@
+package UserData;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -13,34 +15,21 @@ import java.util.Scanner;
  * allows for a file to be read and to be written
  */
 public class UserSerializer {
-
-    // VARIABLES
-    private String filename;
-
-    // CONSTRUCTORS
-
-    /**
-     * sets the inputed file name to the file name actually being used
-     * @param filename
-     */
-    public UserSerializer(String filename)
-    {
-        this.filename = filename;
-    }
+    private static final String userFile = "src\\Users.json";
 
     // READ AND WRITING FUNCTIONS
     /**
-     * read json file then turn it into a file, then returns file with data in it
+     * read user data from a json file
      * @return
      */
-    public ArrayList<User> read()
+    public static UserCollection read()
     {
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader(this.filename));
+            inFile = new Scanner(new FileReader(userFile));
         } catch (FileNotFoundException fe) {
-            return new ArrayList<User>();   // if there is no file, then it will return an empty list
+            return new UserCollection();   // if there is no file, then it will return an empty list
         }
 
         // Build the jsonString object line by line
@@ -48,29 +37,32 @@ public class UserSerializer {
             jsonString = jsonString + inFile.nextLine();
         }
 
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
+                .create();
         User[] users;  //A java primitive of Movie class
         ArrayList<User> userList = new ArrayList<User>(); // An array list to hold a collection of movies
         users = gson.fromJson(jsonString, User[].class);
         Collections.addAll(userList, users);
 
-        return userList;
+        return new UserCollection(userList);
     }
 
     /**
-     * uses the created file and edits or writes in it
-     * @param Users
+     * write user data to a json file
+     * @param users
      */
-    public void write(ArrayList<User> Users)
+    public static void write(UserCollection users)
     {
         Gson gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .setPrettyPrinting()
                 .create();
 
-        String json = gson.toJson(Users);
+        String json = gson.toJson(users);
 
         try {
-            FileWriter myWriter = new FileWriter(this.filename);
+            FileWriter myWriter = new FileWriter(userFile);
             myWriter.write(json);
             myWriter.close();
         } catch (IOException e) {

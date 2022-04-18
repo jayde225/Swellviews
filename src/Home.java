@@ -1,13 +1,13 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.lang.model.type.NullType;
 import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.*;
 import java.io.*;
 
+import MovieData.Movie;
 import com.google.gson.*; //import for Gson capabilities
 
 public class Home extends JFrame{
@@ -22,8 +22,7 @@ public class Home extends JFrame{
         String jsonString = "";
         Scanner inFile = null;
         try {
-            //inFile = new Scanner(new FileReader("C:\\Users\\gmcop\\IdeaProjects\\Swellviews_Local\\src\\SampleMovieFile.json"));
-            inFile = new Scanner(new FileReader("C:\\Users\\megar\\Documents\\GitHub\\Swellviews\\src\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("src\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -41,7 +40,6 @@ public class Home extends JFrame{
         Collections.addAll(CompleteMovieArrayList, movieList);
         //--------------END GSON IMPLEMENTATION-------------------------------------------------------------------------
 
-        boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
         JFrame homeFrame = new JFrame("Swellviews");
         JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
@@ -101,7 +99,6 @@ public class Home extends JFrame{
         forwardAndBackButtons.add(goBack);
         forwardAndBackButtons.add(getMoreMovies);
 
-        accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
         filterMenu(buttonFilter);
 
@@ -223,60 +220,6 @@ public class Home extends JFrame{
         });
     }
 
-    public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
-
-        JPopupMenu accountmenu = new JPopupMenu();
-        JMenu loginmenu = new JMenu("Log In");
-        //final JPopupMenu logoutmenu = new JPopupMenu();
-
-        JButton enterB = new JButton("Enter");          // Confirm login button
-        JMenuItem logoutB = new JMenuItem("Log out");   // Logout button
-
-        JLabel userLabel = new JLabel("Username:");     // Username Label
-        JLabel passLabel = new JLabel("Password:");     // Password Label
-
-        JTextField userField = new JTextField();            // User enters username
-        JTextField passField = new JTextField();            // User enters password
-
-        loginmenu.add(userLabel); //setMenuLoction(int x, int y) for login window
-        loginmenu.add(userField);
-        loginmenu.add(passLabel);
-        loginmenu.add(passField);
-        loginmenu.add(enterB);
-
-        if(loggedIn == true) {accountmenu.add(logoutB);}       // If logged in, show logout menu
-        else{accountmenu.add(loginmenu);}     // If logged out, show login menu
-
-        buttonAccount.addActionListener( new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent button_pressed) {
-                accountmenu.show(buttonAccount, buttonAccount.getHorizontalAlignment(), buttonAccount.getHeight());
-            }
-        });
-
-        enterB.addActionListener( new ActionListener() { /** No functionality Currently */
-        public void actionPerformed(ActionEvent button_pressed) {
-            //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
-            javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
-            //once closes, initiate login procedure
-            //how use enter key OR click to submit
-            //need error handling (not close) for incorrect login, create account
-            // or to show login successful
-        }
-        } );
-
-        /*logoutB.addActionListener( new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                logoutmenu.show(logoutB, logoutB.getWidth(), logoutB.getHeight());
-
-                //This will need to do the logout procedure, what ever that looks like ***************
-                //will also need to close menu and somehow make loggedIn = false; again
-                //since menu item, will not use action listener and will need to act
-                //from that menu selection
-            }
-        } );*/ /** Logout (Unfinished) */
-    }
-
     public static void collectionMenu (JButton buttonCollections) {
 
         JPopupMenu collectionMenu = new JPopupMenu(); // Main popup for list of collections
@@ -334,7 +277,7 @@ public class Home extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(collectionNameField.getText());
+                //currentUser.addCollection(collectionNameField.getText());
             }
         });
 
