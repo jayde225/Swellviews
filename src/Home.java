@@ -15,12 +15,12 @@ import moviemodel.*; //import Swellviews package
 
 public class Home extends JFrame{
 
-    static String displayName = "Suggestions"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
-
     private static int movieCounter = 0;
     private static int movieEnd = 0;
     private static int movieListEnd = 0;
     private static ArrayList<Movie> arrayListName = new ArrayList<Movie>();
+
+    private static String displayName;
 
     private static int darkMode = 0;
 
@@ -65,7 +65,7 @@ public class Home extends JFrame{
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader("C:\\Users\\jayde\\IdeaProjects\\Swellviews\\src\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("C:\\\\Users\\\\gmcop\\\\IdeaProjects\\\\Swellviews_Local\\\\src\\\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -110,10 +110,11 @@ public class Home extends JFrame{
 
         JPanel forwardAndBackButtons = new JPanel();
 
+        displayName = "Browse"; //Contains homepage grid name for display. Will be changed to show where movies are coming from (Collections, Search Results, etc.)
+
         //MovieDisplay grid layout on homepage:
         JPanel movieGrid = new JPanel();
         movieGrid.setLayout(new GridLayout(2,4));
-        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
         // DISPLAY MOVIES BY SEARCH------------------------------------------------------------------
         buttonSearch.addActionListener(new ActionListener() {
@@ -175,12 +176,12 @@ public class Home extends JFrame{
                 }
 
                 //Display movies that were found in the search
-                displayName = "Search Results";
                 arrayListName = searchedForMovies;
                 movieCounter = 0;
                 movieGrid.removeAll();
                 SwingUtilities.updateComponentTreeUI(homeFrame);
                 movieListEnd = 0;
+                displayName = "Search Results";
                 movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
             }
         });
@@ -482,6 +483,7 @@ public class Home extends JFrame{
                 movieGrid.removeAll();
                 SwingUtilities.updateComponentTreeUI(homeFrame);
                 movieListEnd = 0;
+                displayName = "Browse";
                 movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
             }
         });
@@ -513,8 +515,6 @@ public class Home extends JFrame{
 
     public static void movieGridUpdater(JFrame home, JPanel forwardAndBackButtons, ArrayList<Movie> movieArrayList, JPanel movieGrid){
 
-        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
-
         if (darkMode == 0){
             movieGrid.setBackground(null);
             forwardAndBackButtons.setBackground(null);
@@ -537,7 +537,7 @@ public class Home extends JFrame{
                 MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), darkMode, 1);
                 movieCounter++;
                 movieGrid.add(movie1);
-                movieSelection(movie1, movieArrayList);
+                MovieDetailsDisplay movieForDisplay= new MovieDetailsDisplay(movie1, movieArrayList, movieGrid, movieCounter, darkMode, displayName);
                 e.next();
             }
             else {
@@ -549,115 +549,12 @@ public class Home extends JFrame{
         home.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
     }
 
-    public static void movieSelection(MovieDisplay movieSelected, ArrayList<Movie> movieArrayList){
-
-        JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - 1).getTitle());
-        JPanel movieDetailsRightPanel = new JPanel();
-        movieDetailsRightPanel.setLayout(new GridLayout(13,1));
-
-        JLabel movieTitle = new JLabel("Title: " + movieArrayList.get(movieCounter - 1).getTitle());
-        JLabel movieYear = new JLabel("Year: " + movieArrayList.get(movieCounter - 1).getYear().toString());
-        JLabel movieGenre = new JLabel("Genre: " + movieArrayList.get(movieCounter - 1).getGenres());
-        JLabel movieAgeRating = new JLabel("Age Rating: " + movieArrayList.get(movieCounter - 1).getMPARating());
-        JLabel movieRuntime = new JLabel("Runtime: " + movieArrayList.get(movieCounter - 1).getRunTime());
-        JLabel movieDirector = new JLabel("Director: " + movieArrayList.get(movieCounter - 1).getDirector());
-        JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - 1).getWriters());
-        JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - 1).getActors());
-
-
-
-        JLabel moviePlotLabel = new JLabel("Plot:");
-        JTextArea moviePlot = new JTextArea (movieArrayList.get(movieCounter - 1).getPlot());
-        moviePlot.setEditable(false);
-        moviePlot.setWrapStyleWord(true);
-        moviePlot.setLineWrap(true);
-
-        JLabel movieLanguage = new JLabel();
-        JLabel movieCountry = new JLabel();
-        JLabel movieAwards = new JLabel("Awards: " + movieArrayList.get(movieCounter - 1).getAwards());
-        JLabel movieRatings = new JLabel();
-        JLabel movieRating = new JLabel();
-
-        JPanel rateMovieButtons = new JPanel();
-        JButton dislikeMovie = new JButton("Dislike");
-        JButton likeMovie = new JButton("Like");
-        rateMovieButtons.add(dislikeMovie);
-        rateMovieButtons.add(likeMovie);
-
-        JButton addToCollection = new JButton("Add to Collection");
-
-        movieDetailsRightPanel.add(movieTitle);
-        movieDetailsRightPanel.add(movieGenre);
-        movieDetailsRightPanel.add(movieYear);
-        movieDetailsRightPanel.add(movieAgeRating);
-        movieDetailsRightPanel.add(movieRuntime);
-        movieDetailsRightPanel.add(movieDirector);
-        movieDetailsRightPanel.add(movieWriter);
-        movieDetailsRightPanel.add(movieActors);
-        movieDetailsRightPanel.add(movieAwards);
-        movieDetailsRightPanel.add(moviePlotLabel);
-        movieDetailsRightPanel.add(moviePlot);
-        movieDetailsRightPanel.add(rateMovieButtons);
-        movieDetailsRightPanel.add(addToCollection);
-
-
-        movieDetailsFrame.setLayout(new GridLayout(1,2));
-        movieDetailsFrame.setSize(700, 550);
-        movieDetailsFrame.setLocationRelativeTo(null);
-
-        if (darkMode == 1) {
-            movieTitle.setForeground(Color.white);
-            movieGenre.setForeground(Color.white);
-            movieYear.setForeground(Color.white);
-            movieAgeRating.setForeground(Color.white);
-            movieRuntime.setForeground(Color.white);
-            movieDirector.setForeground(Color.white);
-            movieWriter.setForeground(Color.white);
-            movieActors.setForeground(Color.white);
-            movieAwards.setForeground(Color.white);
-            moviePlotLabel.setForeground(Color.white);
-            movieDetailsFrame.getContentPane().setBackground(Color.darkGray);
-            moviePlot.setBackground(Color.darkGray);
-            moviePlot.setForeground(Color.white);
-            movieDetailsRightPanel.setBackground(Color.darkGray);
-            rateMovieButtons.setBackground(Color.darkGray);
-        }
-
-        MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter-1).getTitle(), movieArrayList.get(movieCounter-1).getPosterLink(), darkMode, 1);
-
-        movieSelected.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                movieDetailsFrame.add(movieSelectionDisplay);
-                movieDetailsFrame.add(movieDetailsRightPanel);
-                movieDetailsFrame.setVisible(true);
-            }
-
-            //These shouldn't be needed:
-            @Override
-            public void mousePressed(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseReleased(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseEntered(MouseEvent e) {
-
-            }
-            @Override
-            public void mouseExited(MouseEvent e) {
-
-            }
-        });
-    }
-
     public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
 
         JPopupMenu accountmenu = new JPopupMenu();
         JButton loginButton = new JButton("Log In                          ");
         JButton createAccountButton = new JButton("Create new account ");
+        JButton toggleDarkMode = new JButton("ToggleDarkMode");
         boolean haveAccount;
         //final JPopupMenu logoutmenu = new JPopupMenu();
 
@@ -693,6 +590,7 @@ public class Home extends JFrame{
         else{
             accountmenu.add(loginButton);
             accountmenu.add(createAccountButton);
+            accountmenu.add(toggleDarkMode);
         }     // If logged out, show login menu
 
 
@@ -731,10 +629,21 @@ public class Home extends JFrame{
             }
         } );
 
+        toggleDarkMode.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (darkMode == 1){
+                    darkMode = 0;
+                }
+                else{
+                    darkMode = 1;
+                }
+            }
+        });
+
         /*logoutB.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 logoutmenu.show(logoutB, logoutB.getWidth(), logoutB.getHeight());
-
                 //This will need to do the logout procedure, what ever that looks like ***************
                 //will also need to close menu and somehow make loggedIn = false; again
                 //since menu item, will not use action listener and will need to act
@@ -742,8 +651,6 @@ public class Home extends JFrame{
             }
         } );*/ /** Logout (Unfinished) */
     }
-
-    //public static void darkModeUpdator (JFrame home, JPanel movieGrid );
 
     public static void collectionMenu (JButton buttonCollections) {
 
