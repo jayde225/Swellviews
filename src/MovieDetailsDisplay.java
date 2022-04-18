@@ -6,11 +6,19 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+/**
+ * \ Creates a new window for a given Movie object within an ArrayList of Movie objects. Displays details from JSON file as well as the objects related MovieDisplay object.
+ */
 public class MovieDetailsDisplay extends JFrame {
-    public MovieDetailsDisplay(MovieDisplay movieSelected, ArrayList<Movie> movieArrayList, JPanel movieGrid, int movieCounter, int darkMode, String displayName){
 
-        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
-
+    /**
+     * MovieDetailsDisplay constructor, automatically creates new JFrame using MovieDisplay object given and movie details from Movie.java, and attaches new MouseListener to the MovieDisplay given that shows the frame on click.
+     * @param movieSelected The MovieDisplay object used in the movieGrid (used to attach MouseListener)
+     * @param movieArrayList ArrayList of Movie objects being viewed
+     * @param movieCounter The static int "movieCounter", used to know where in the ArrayList the Movie is
+     * @param darkMode The static int "darkMode" (or manual 1 if yes, 0 if no)
+     */
+    public MovieDetailsDisplay(MovieDisplay movieSelected, ArrayList<Movie> movieArrayList, int movieCounter, int darkMode){
 
         JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - 1).getTitle());
         JPanel movieDetailsRightPanel = new JPanel();
@@ -24,8 +32,6 @@ public class MovieDetailsDisplay extends JFrame {
         JLabel movieDirector = new JLabel("Director: " + movieArrayList.get(movieCounter - 1).getDirector());
         JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - 1).getWriters());
         JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - 1).getActors());
-
-
 
         JLabel moviePlotLabel = new JLabel("Plot:");
         JTextArea moviePlot = new JTextArea (movieArrayList.get(movieCounter - 1).getPlot());

@@ -4,8 +4,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.*;
 import java.io.*;
 
@@ -13,6 +11,15 @@ import com.google.gson.*; //import for Gson capabilities
 
 import moviemodel.*; //import Swellviews package
 
+/**
+ * The homepage. Contains the Main.
+ * Contains static variables:
+ * movieCounter - used to keep track of the current position in an ArrayList of movies
+ * movieEnd  - used when the movieGrid displays less than 8 items. Keeps track of how many extra spaces there were for use when going backwards in the grid.
+ * movieListEnd - used to know when the ArrayList of movies has ended. 0 if there are more to read, 1 if not.
+ * arrayListName - an ArrayList of Movie objects that is given new ArrayLists by Search, Filter, Sort, and Collection models. Used by movie display views.
+ * displayName - a String used by movieGridUpdator
+ */
 public class Home extends JFrame{
 
     private static int movieCounter = 0;
@@ -513,7 +520,16 @@ public class Home extends JFrame{
 
     }
 
+    /**
+     *
+     * @param home
+     * @param forwardAndBackButtons
+     * @param movieArrayList
+     * @param movieGrid
+     */
     public static void movieGridUpdater(JFrame home, JPanel forwardAndBackButtons, ArrayList<Movie> movieArrayList, JPanel movieGrid){
+
+        movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
         if (darkMode == 0){
             movieGrid.setBackground(null);
@@ -537,7 +553,7 @@ public class Home extends JFrame{
                 MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), darkMode, 1);
                 movieCounter++;
                 movieGrid.add(movie1);
-                MovieDetailsDisplay movieForDisplay= new MovieDetailsDisplay(movie1, movieArrayList, movieGrid, movieCounter, darkMode, displayName);
+                MovieDetailsDisplay movieForDisplay= new MovieDetailsDisplay(movie1, movieArrayList, movieCounter, darkMode); //Simply calling MovieDetailsDisplay does everything
                 e.next();
             }
             else {
