@@ -1,5 +1,7 @@
+package moviemodel;
+
 /**
- * A class for creating and storing Ratings objects
+ * A class for creating and storing moviemodel.Ratings objects
  */
 public class Ratings {
     //VARIABLES

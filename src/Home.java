@@ -9,6 +9,7 @@ import java.io.*;
 
 import com.google.gson.*; //import for Gson capabilities
 
+import moviemodel.*; //import our package
 
 public class Home extends JFrame{
 
@@ -72,7 +73,7 @@ public class Home extends JFrame{
         }
 
         Gson gson = new Gson();
-        Movie[] movieList;  //A java primitive of Movie class
+        Movie[] movieList;  //A java primitive of moviemodel.Movie class
         ArrayList<Movie> CompleteMovieArrayList = new ArrayList<Movie>(); // An array list to hold a collection of movies
         movieList = gson.fromJson(jsonString, Movie[].class);
         Collections.addAll(CompleteMovieArrayList, movieList);
@@ -83,7 +84,7 @@ public class Home extends JFrame{
         boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
         JFrame homeFrame = new JFrame("Swellviews");
-        JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
+        JTextField searchField = new JTextField("Enter moviemodel.Movie Name"); //figureout how to erase text on click in field
         //so can search without having to delete default text, or just make label (see accountmenu/login)
         JButton buttonSearch = new JButton("Search");
         JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
@@ -124,7 +125,7 @@ public class Home extends JFrame{
                 //SEARCH BY TITLE
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!searchedForMovies.contains(testMovie)) {
-                        if (testMovie.Title.contains(searchField.getText())) {
+                        if (testMovie.getTitle().contains(searchField.getText())) {
                             searchedForMovies.add(testMovie);
                         }
                     }
@@ -132,7 +133,7 @@ public class Home extends JFrame{
                 //SEARCH BY GENRE
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!searchedForMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains(searchField.getText())) {
+                        if (testMovie.getGenres().contains(searchField.getText())) {
                             searchedForMovies.add(testMovie);
                         }
                     }
@@ -149,7 +150,7 @@ public class Home extends JFrame{
                 //SEARCH BY DIRECTOR
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!searchedForMovies.contains(testMovie)) {
-                        if (testMovie.Director.contains(searchField.getText())) {
+                        if (testMovie.getDirector().contains(searchField.getText())) {
                             searchedForMovies.add(testMovie);
                         }
                     }
@@ -157,7 +158,7 @@ public class Home extends JFrame{
                 //SEARCH BY ACTORS
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!searchedForMovies.contains(testMovie)) {
-                        if (testMovie.Actors.contains(searchField.getText())) {
+                        if (testMovie.getActors().contains(searchField.getText())) {
                             searchedForMovies.add(testMovie);
                         }
                     }
@@ -165,7 +166,7 @@ public class Home extends JFrame{
                 //SEARCH BY WRITER
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!searchedForMovies.contains(testMovie)) {
-                        if (testMovie.Writer.contains(searchField.getText())) {
+                        if (testMovie.getWriters().contains(searchField.getText())) {
                             searchedForMovies.add(testMovie);
                         }
                     }
@@ -279,16 +280,16 @@ public class Home extends JFrame{
                 //Since movies only have one rating, this can be condensed into one for loop
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if ((testMovie.Rated.equals("G") || testMovie.Rated.equals("TV-G")) && ratedG.isSelected()) {
+                        if ((testMovie.getMPARating().equals("G") || testMovie.getMPARating().equals("TV-G")) && ratedG.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Rated G"
                         }
-                        if (testMovie.Rated.equals("PG") && ratedPG.isSelected()) {
+                        if (testMovie.getMPARating().equals("PG") && ratedPG.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Rated PG"
                         }
-                        if (testMovie.Rated.equals("PG-13") && ratedPG13.isSelected()) {
+                        if (testMovie.getMPARating().equals("PG-13") && ratedPG13.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Rated PG-13"
                         }
-                        if ((testMovie.Rated.equals("R") || testMovie.Rated.equals("TV-MA") || testMovie.Rated.equals("X")) && ratedR.isSelected()) {
+                        if ((testMovie.getMPARating().equals("R") || testMovie.getMPARating().equals("TV-MA") || testMovie.getMPARating().equals("X")) && ratedR.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Rated R"
                         }
                         if (testMovie.getMPARating().equals("Not Rated") && ratedUR.isSelected()) {
@@ -299,133 +300,133 @@ public class Home extends JFrame{
                 //SEARCH BY GENRE
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Action") && genreAction.isSelected()) {
+                        if (testMovie.getGenres().contains("Action") && genreAction.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Action"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Adventure") && genreAdventure.isSelected()) {
+                        if (testMovie.getGenres().contains("Adventure") && genreAdventure.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Adventure"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Mystery") && genreMystery.isSelected()) {
+                        if (testMovie.getGenres().contains("Mystery") && genreMystery.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Mystery"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Romance") && genreRomance.isSelected()) {
+                        if (testMovie.getGenres().contains("Romance") && genreRomance.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Romance"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Horror") && genreHorror.isSelected()) {
+                        if (testMovie.getGenres().contains("Horror") && genreHorror.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Horror"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Comedy") && genreComedy.isSelected()) {
+                        if (testMovie.getGenres().contains("Comedy") && genreComedy.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Comedy"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Documentary") && genreDocumentary.isSelected()) {
+                        if (testMovie.getGenres().contains("Documentary") && genreDocumentary.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Documentary"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Drama") && genreDrama.isSelected()) {
+                        if (testMovie.getGenres().contains("Drama") && genreDrama.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Drama"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Short") && genreShort.isSelected()) {
+                        if (testMovie.getGenres().contains("Short") && genreShort.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Short"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Sci-Fi") && genreSciFi.isSelected()) {
+                        if (testMovie.getGenres().contains("Sci-Fi") && genreSciFi.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Sci-Fi"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Crime") && genreCrime.isSelected()) {
+                        if (testMovie.getGenres().contains("Crime") && genreCrime.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Crime"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Thriller") && genreThriller.isSelected()) {
+                        if (testMovie.getGenres().contains("Thriller") && genreThriller.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Thriller"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Fantasy") && genreFantasy.isSelected()) {
+                        if (testMovie.getGenres().contains("Fantasy") && genreFantasy.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Fantasy"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Animation") && genreAnimation.isSelected()) {
+                        if (testMovie.getGenres().contains("Animation") && genreAnimation.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Animation"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Family") && genreFamily.isSelected()) {
+                        if (testMovie.getGenres().contains("Family") && genreFamily.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Family"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Musical") && genreMusical.isSelected()) {
+                        if (testMovie.getGenres().contains("Musical") && genreMusical.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Musical"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Biography") && genreBiography.isSelected()) {
+                        if (testMovie.getGenres().contains("Biography") && genreBiography.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Biography"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("Sport") && genreSport.isSelected()) {
+                        if (testMovie.getGenres().contains("Sport") && genreSport.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Sport"
                         }
                     }
                 }
                 for (Movie testMovie : CompleteMovieArrayList) {
                     if (!filteredMovies.contains(testMovie)) {
-                        if (testMovie.Genre.contains("History") && genreHistory.isSelected()) {
+                        if (testMovie.getGenres().contains("History") && genreHistory.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "History"
                         }
                     }

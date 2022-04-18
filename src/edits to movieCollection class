@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class MovieCollection {
 
-    private ArrayList<Movie> MovieCollection = new ArrayList<Movie>();
+    private ArrayList<moviemodel.Movie> MovieCollection = new ArrayList<moviemodel.Movie>();
     private int collectionLength = 0;
     private String collectionName;
 
@@ -25,7 +25,7 @@ public class MovieCollection {
      * returns the movie collection list
      * @return
      */
-    public ArrayList<Movie> getMovieCollection()
+    public ArrayList<moviemodel.Movie> getMovieCollection()
     {
         return MovieCollection;
     }
@@ -44,7 +44,7 @@ public class MovieCollection {
      * checks if the movie is already added. if not, it sets the last place of the list as the movie inputed then adds one. returns if adding was successful or not
      * @param newMovie
      */
-    public boolean addMovie(Movie newMovie)
+    public boolean addMovie(moviemodel.Movie newMovie)
     {
         boolean duplicateMovie;
         for (int i = 0; i < collectionLength; i++) {

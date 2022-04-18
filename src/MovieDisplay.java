@@ -58,7 +58,7 @@ public class MovieDisplay extends JPanel{
 
             if (titleDarkMode == 1){g2d.setColor(Color.white);}
             else {g2d.setColor(Color.black);}
-            g2d.setFont(new Font("Movie Title", Font.PLAIN, 30));
+            g2d.setFont(new Font("moviemodel.Movie Title", Font.PLAIN, 30));
 
             if (movieName.length() > 25){
                 String movieNameCondensed = movieName.substring(0,20) + "...";

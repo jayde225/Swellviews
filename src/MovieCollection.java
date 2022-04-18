@@ -1,3 +1,5 @@
+import moviemodel.Movie;
+
 import java.util.ArrayList;
 
 public class MovieCollection {
