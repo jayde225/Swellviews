@@ -1,6 +1,7 @@
 package moviemodel;
 
 import java.util.Comparator;
+import java.util.*;
 
 /**
  * This class is used to sort a moviemodel.Movie array list by year, oldest to newest

@@ -9,7 +9,7 @@ import java.io.*;
 
 import com.google.gson.*; //import for Gson capabilities
 
-import moviemodel.*; //import our package
+import moviemodel.*; //import Swellviews package
 
 public class Home extends JFrame{
 
@@ -84,7 +84,7 @@ public class Home extends JFrame{
         boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
         //Homepage Attribute Declarations
         JFrame homeFrame = new JFrame("Swellviews");
-        JTextField searchField = new JTextField("Enter moviemodel.Movie Name"); //figureout how to erase text on click in field
+        JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
         //so can search without having to delete default text, or just make label (see accountmenu/login)
         JButton buttonSearch = new JButton("Search");
         JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
@@ -190,7 +190,7 @@ public class Home extends JFrame{
                 //Sort whatever the last ArrayList that was used and display to user based off of what they selected
                 movieCopy = (ArrayList<Movie>)arrayListName.clone(); //Clone the array most recently used
                 //Sort alphabetically A-Z
-                if (sortAZ.isSelected()) {
+                /*if (sortAZ.isSelected()) {
                     NameCompare nameCompare = new NameCompare();
                     Collections.sort(movieCopy, nameCompare);
                     //Display the sorted movies
@@ -264,7 +264,7 @@ public class Home extends JFrame{
                     SwingUtilities.updateComponentTreeUI(homeFrame);
                     movieListEnd = 0;
                     movieGridUpdater(homeFrame, forwardAndBackButtons, arrayListName, movieGrid);
-                }
+                }*/
             }
         });
 

@@ -2,6 +2,7 @@ package moviemodel;
 
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.*;
 
 /**
  * This class is used to sort a moviemodel.Movie array list by runtime, shortest to longest
