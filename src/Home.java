@@ -280,7 +280,7 @@ public class Home extends JFrame{
                 //added to the list of found movies. If it has, do not add again
                 //FILTER BY MATURITY RATING
                 //Since movies only have one rating, this can be condensed into one for loop
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if ((testMovie.getMPARating().equals("G") || testMovie.getMPARating().equals("TV-G")) && ratedG.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Rated G"
@@ -300,133 +300,133 @@ public class Home extends JFrame{
                     }
                 }
                 //SEARCH BY GENRE
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Action") && genreAction.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Action"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Adventure") && genreAdventure.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Adventure"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Mystery") && genreMystery.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Mystery"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Romance") && genreRomance.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Romance"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Horror") && genreHorror.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Horror"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Comedy") && genreComedy.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Comedy"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Documentary") && genreDocumentary.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Documentary"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Drama") && genreDrama.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Drama"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Short") && genreShort.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Short"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Sci-Fi") && genreSciFi.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Sci-Fi"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Crime") && genreCrime.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Crime"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Thriller") && genreThriller.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Thriller"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Fantasy") && genreFantasy.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Fantasy"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Animation") && genreAnimation.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Animation"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Family") && genreFamily.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Family"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Musical") && genreMusical.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Musical"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Biography") && genreBiography.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Biography"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("Sport") && genreSport.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "Sport"
                         }
                     }
                 }
-                for (Movie testMovie : CompleteMovieArrayList) {
+                for (Movie testMovie : arrayListName) {
                     if (!filteredMovies.contains(testMovie)) {
                         if (testMovie.getGenres().contains("History") && genreHistory.isSelected()) {
                             filteredMovies.add(testMovie); //Filter: "History"
