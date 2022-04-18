@@ -1,7 +1,9 @@
+package moviemodel;
+
 import java.util.*;
 
 /**
- * A class for creating and editing Movie objects
+ * A class for creating and editing moviemodel.Movie objects
  */
 public class Movie {
     //VARIABLES
