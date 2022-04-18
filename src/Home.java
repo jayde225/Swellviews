@@ -1,4 +1,4 @@
-//DESIGN PATTERN: The Home class is modeled after the Observer design pattern. Home uses
+//DESIGN PATTERN: The Home class is modeled after the Observer design pattern
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -632,8 +632,20 @@ public class Home extends JFrame{
     public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
 
         JPopupMenu accountmenu = new JPopupMenu();
-        JMenu loginmenu = new JMenu("Log In");
+        JButton loginButton = new JButton("Log In                          ");
+        JButton createAccountButton = new JButton("Create new account ");
+        boolean haveAccount;
         //final JPopupMenu logoutmenu = new JPopupMenu();
+
+        JFrame loginWindow = new JFrame("Login"); //"Popup" window for entering user info
+        JPanel loginWindowPanel = new JPanel(); //Needed for BoxLayout
+        loginWindow.add(loginWindowPanel);
+        loginWindowPanel.setLayout(new BoxLayout(loginWindowPanel, BoxLayout.Y_AXIS)); // BoxLayout is simple to organize elements in a column
+        loginWindow.setResizable(false); // Makes the window non-resizable
+
+        //Setting size and location of popup menu
+        loginWindow.setSize(300, 150);
+        loginWindow.setLocationRelativeTo(null);
 
         JButton enterB = new JButton("Enter");          // Confirm login button
         JMenuItem logoutB = new JMenuItem("Log out");   // Logout button
@@ -644,26 +656,21 @@ public class Home extends JFrame{
         JTextField userField = new JTextField();            // User enters username
         JTextField passField = new JTextField();            // User enters password
 
-        loginmenu.add(userLabel); //setMenuLoction(int x, int y) for login window
-        loginmenu.add(userField);
-        loginmenu.add(passLabel);
-        loginmenu.add(passField);
-        loginmenu.add(enterB);
+        userField.setSize(200,10);
+        passField.setSize(200, 10);
+
+        loginWindowPanel.add(userLabel); //setMenuLoction(int x, int y) for login window
+        loginWindowPanel.add(userField);
+        loginWindowPanel.add(passLabel);
+        loginWindowPanel.add(passField);
+        loginWindowPanel.add(enterB);
 
         if(loggedIn == true) {accountmenu.add(logoutB);}       // If logged in, show logout menu
-        else{accountmenu.add(loginmenu);}     // If logged out, show login menu
+        else{
+            accountmenu.add(loginButton);
+            accountmenu.add(createAccountButton);
+        }     // If logged out, show login menu
 
-        JMenuItem darkModeToggle = new JMenuItem("Toggle Dark Mode");
-        accountmenu.add(darkModeToggle);
-
-        darkModeToggle.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (darkMode == 0){darkMode = 1;}
-                else {darkMode = 0;}
-
-            }
-        });
 
         buttonAccount.addActionListener( new ActionListener() {
             @Override
@@ -672,20 +679,38 @@ public class Home extends JFrame{
             }
         });
 
-        enterB.addActionListener( new ActionListener() { /** No functionality Currently */
-        public void actionPerformed(ActionEvent button_pressed) {
-            //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
-            javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
-            //once closes, initiate login procedure
-            //how use enter key OR click to submit
-            //need error handling (not close) for incorrect login, create account
-            // or to show login successful
-        }
+        loginButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                loginWindow.setVisible(true);
+            }
+        });
+
+        createAccountButton.addActionListener( new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                loginWindow.setVisible(true);
+            }
+        });
+
+        enterB.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent button_pressed) {
+                //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
+                //javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
+                loginWindow.setVisible(false);
+                //initiate proper login/creation procedure (check for existing username/create new one
+
+                //once closes, initiate login procedure
+                //how use enter key OR click to submit
+                //need error handling (not close) for incorrect login, create account
+                // or to show login successful
+            }
         } );
 
         /*logoutB.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 logoutmenu.show(logoutB, logoutB.getWidth(), logoutB.getHeight());
+
                 //This will need to do the logout procedure, what ever that looks like ***************
                 //will also need to close menu and somehow make loggedIn = false; again
                 //since menu item, will not use action listener and will need to act
