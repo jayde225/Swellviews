@@ -57,13 +57,21 @@ public class LoginModel {
     }
 
     /**
-     * remove and re-add current user before saving to make sure we have the latest data
+     * saves data and logs user out
      */
     public void logOut(){
+        save();
+        setCurrentUser(null);
+    }
+
+    /**
+     * remove and re-add current user before saving to make sure we have the latest data
+     */
+    public void save()
+    {
         this.allUsers.remove(currentUser);
         this.allUsers.add(currentUser);
 
         UserSerializer.write(allUsers);
-        setCurrentUser(null);
     }
 }

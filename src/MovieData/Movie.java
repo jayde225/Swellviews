@@ -1,5 +1,7 @@
 package MovieData;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.*;
 
 /**
@@ -7,17 +9,29 @@ import java.util.*;
  */
 public class Movie {
     //VARIABLES
+    @Expose
     String Title;
+    @Expose
     Integer Year;
+    @Expose
     String Rated;
+    @Expose
     String Released;
+    @Expose
     String Runtime;
+    @Expose
     String Genre;
+    @Expose
     String Director;
+    @Expose
     String Writer;
+    @Expose
     String Actors;
+    @Expose
     String Plot;
+    @Expose
     String Awards;
+    @Expose
     String Poster;
     ArrayList<Ratings> Ratings = new ArrayList<Ratings>(); //Used to store all ratings for a movie
 

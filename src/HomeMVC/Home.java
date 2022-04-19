@@ -14,6 +14,9 @@ import LoginMVC.LoginModel;
 import LoginMVC.LoginView;
 import MovieMVC.*;
 import MovieData.Movie;
+import UserData.User;
+import UserData.UserMovieCollection;
+import UserData.UserMovieRating;
 import com.google.gson.*; //import for Gson capabilities
 
 public class Home extends JFrame{
@@ -193,8 +196,39 @@ public class Home extends JFrame{
         JPanel rateMovieButtons = new JPanel();
         JButton dislikeMovie = new JButton("Dislike");
         JButton likeMovie = new JButton("Like");
+        JButton addToCollectionButton = new JButton("Add Movie To Collection");
+        JPopupMenu addToCollectionMenu= new JPopupMenu("Add Movie To Collection");
+
+        User currentUser = LoginModel.getCurrentUser();
+        for(int i = 0; i < currentUser.getMyCollections().size(); i++)
+        {
+            UserMovieCollection currentCollection = currentUser.getMyCollections().get(i);
+            //Adding items to the collectionMenu list:
+            JMenuItem item = new JMenuItem(currentCollection.getCollectionName());
+            addToCollectionMenu.add(item);
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    UserMovieRating movie = new UserMovieRating(movieArrayList.get(movieCounter - 1));
+                    currentCollection.addMovie(movie);
+                    LoginModel loginmodel = new LoginModel();
+                    loginmodel.save();
+                }
+            });
+        }
+
+        addToCollectionButton.addActionListener (new ActionListener() { // When the collections button (buttonCollections) is pressed...
+            @Override
+            public void actionPerformed(ActionEvent button_pressed) {
+                addToCollectionMenu.show(addToCollectionButton, addToCollectionButton.getHorizontalAlignment(),addToCollectionButton.getHeight()); //Menu appears below and on the right side of the collections button (buttonCollections)
+            }
+        });
+
+
+
         rateMovieButtons.add(dislikeMovie);
         rateMovieButtons.add(likeMovie);
+        rateMovieButtons.add(addToCollectionButton);
 
         movieDetailsRightPanel.add(movieTitle);
         movieDetailsRightPanel.add(movieGenre);
@@ -255,13 +289,8 @@ public class Home extends JFrame{
         JButton createCollection = new JButton("Create a New Collection");
 
         //Creating items for the collectionMenu list:
-        JMenuItem testItem1 = new JMenuItem("Test Item 1");
-        JMenuItem testItem2 = new JMenuItem("Test Item 123456789");
-
-        //Adding items to the collectionMenu list:
-        collectionMenu.add(testItem1);
-        collectionMenu.add(testItem2);
-        collectionMenu.add(createCollection); // Button for creating a new collection (should be kept at the bottom)
+        User currentUser = LoginModel.getCurrentUser();
+        populateCollectionMenu(collectionMenu, createCollection, currentUser);
 
         //Creating items for the createNewCollection popup:
         JLabel collectionNameLabel = new JLabel("Enter Collection Name:");
@@ -299,12 +328,51 @@ public class Home extends JFrame{
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                //currentUser.addCollection(collectionNameField.getText());
+                currentUser.addCollection(collectionNameField.getText());
+                LoginModel loginmodel = new LoginModel();
+                loginmodel.save();
+
+                collectionMenu.removeAll(); // removes all before because we are copying it back into it
+                populateCollectionMenu(collectionMenu,createCollection,currentUser);
+                createNewCollection.setVisible(false);
             }
         });
 
 
     }
+
+    private static void populateCollectionMenu(JPopupMenu collectionMenu, JButton createCollection, User currentUser) {
+        for(int i = 0; i < currentUser.getMyCollections().size(); i++)
+        {
+            UserMovieCollection currentCollection = currentUser.getMyCollections().get(i);
+            //Adding items to the collectionMenu list:
+            JMenuItem item = new JMenuItem(currentCollection.getCollectionName());
+            collectionMenu.add(item);
+
+            JFrame movieFrame = new JFrame();
+            JPanel moviePanel = new JPanel();
+            moviePanel.setLayout(new BoxLayout(moviePanel, BoxLayout.Y_AXIS));
+            for(int j = 0; j < currentCollection.getMovieCollection().size(); j++)
+            {
+                Movie currentMovie = currentCollection.getMovieCollection().get(j).getMovie();
+                JLabel movielabel = new JLabel(currentMovie.getTitle() + " - " + currentMovie.getYear());
+                moviePanel.add(movielabel);
+            }
+
+            movieFrame.add(moviePanel);
+            movieFrame.setSize(300,800);
+
+            item.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    movieFrame.setVisible(true);
+                }
+            });
+        }
+
+        collectionMenu.add(createCollection); // Button for creating a new collection (should be kept at the bottom)
+    }
+
     //filter: genre, maturity rating, runtime (under 2 hours etc)
     public static void filterMenu(JButton buttonFilter){
         JPopupMenu filterPopupMenu = new JPopupMenu();

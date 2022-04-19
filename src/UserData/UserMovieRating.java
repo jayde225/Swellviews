@@ -1,6 +1,7 @@
 package UserData;
 
 import MovieData.*;
+import com.google.gson.annotations.Expose;
 
 import java.util.Objects;
 
@@ -10,7 +11,9 @@ import java.util.Objects;
 public class UserMovieRating {
 
     // VARIABLES
+    @Expose
     private String rating;
+    @Expose
     private Movie movie;
 
     // CONSTRUCTORS
@@ -33,6 +36,10 @@ public class UserMovieRating {
     public UserMovieRating(Movie movie)
     {
         this.movie = movie;
+    }
+
+    public Movie getMovie() {
+        return movie;
     }
 
     // COMPARISON FUNCTIONS

@@ -90,18 +90,14 @@ public class User {
      */
     public void addCollection(String name)
     {
-        for (int i = 0; i < myCollections.size(); i++)
-        {
-            if (myCollections.get(i).getCollectionName() == name)
-            {
-                System.out.println("There is already a collection with that name");
-
-            }
-            else
-            {
-                myCollections.add(new UserMovieCollection(name));
+        for (int i = 0; i < myCollections.size(); i++) {
+            if (myCollections.get(i).getCollectionName().equals(name)) {
+                return;
             }
         }
+
+        myCollections.add(new UserMovieCollection(name));
+
     }
 
     /**

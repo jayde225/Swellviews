@@ -2,6 +2,81 @@
   {
     "username": "john.doe",
     "password": "password",
-    "myCollections": []
+    "myCollections": [
+      {
+        "MovieCollection": [
+          {
+            "movie": {
+              "Title": "Fast \u0026 Furious",
+              "Year": 2009,
+              "Rated": "PG-13",
+              "Released": "03 Apr 2009",
+              "Runtime": "107 min",
+              "Genre": "Action, Crime, Thriller",
+              "Director": "Justin Lin",
+              "Writer": "Chris Morgan, Gary Scott Thompson",
+              "Actors": "Vin Diesel, Paul Walker, Michelle Rodriguez",
+              "Plot": "Brian O\u0027Conner, back working for the FBI in Los Angeles, teams up with Dominic Toretto to bring down a heroin importer by infiltrating his operation.",
+              "Awards": "6 wins \u0026 2 nominations",
+              "Poster": "https://m.media-amazon.com/images/M/MV5BYjQ1ZTMxNzgtZDcxOC00NWY5LTk3ZjAtYzRhMDhlNDZlOWEzXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"
+            }
+          },
+          {
+            "movie": {
+              "Title": "Arrival",
+              "Year": 2016,
+              "Rated": "PG-13",
+              "Released": "11 Nov 2016",
+              "Runtime": "116 min",
+              "Genre": "Drama, Sci-Fi",
+              "Director": "Denis Villeneuve",
+              "Writer": "Eric Heisserer, Ted Chiang",
+              "Actors": "Amy Adams, Jeremy Renner, Forest Whitaker",
+              "Plot": "A linguist works with the military to communicate with alien lifeforms after twelve mysterious spacecraft appear around the world.",
+              "Awards": "Won 1 Oscar. 69 wins \u0026 269 nominations total",
+              "Poster": "https://m.media-amazon.com/images/M/MV5BMTExMzU0ODcxNDheQTJeQWpwZ15BbWU4MDE1OTI4MzAy._V1_SX300.jpg"
+            }
+          }
+        ],
+        "collectionName": "Test 6"
+      },
+      {
+        "MovieCollection": [
+          {
+            "movie": {
+              "Title": "Fast \u0026 Furious",
+              "Year": 2009,
+              "Rated": "PG-13",
+              "Released": "03 Apr 2009",
+              "Runtime": "107 min",
+              "Genre": "Action, Crime, Thriller",
+              "Director": "Justin Lin",
+              "Writer": "Chris Morgan, Gary Scott Thompson",
+              "Actors": "Vin Diesel, Paul Walker, Michelle Rodriguez",
+              "Plot": "Brian O\u0027Conner, back working for the FBI in Los Angeles, teams up with Dominic Toretto to bring down a heroin importer by infiltrating his operation.",
+              "Awards": "6 wins \u0026 2 nominations",
+              "Poster": "https://m.media-amazon.com/images/M/MV5BYjQ1ZTMxNzgtZDcxOC00NWY5LTk3ZjAtYzRhMDhlNDZlOWEzXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"
+            }
+          },
+          {
+            "movie": {
+              "Title": "Fast \u0026 Furious",
+              "Year": 2009,
+              "Rated": "PG-13",
+              "Released": "03 Apr 2009",
+              "Runtime": "107 min",
+              "Genre": "Action, Crime, Thriller",
+              "Director": "Justin Lin",
+              "Writer": "Chris Morgan, Gary Scott Thompson",
+              "Actors": "Vin Diesel, Paul Walker, Michelle Rodriguez",
+              "Plot": "Brian O\u0027Conner, back working for the FBI in Los Angeles, teams up with Dominic Toretto to bring down a heroin importer by infiltrating his operation.",
+              "Awards": "6 wins \u0026 2 nominations",
+              "Poster": "https://m.media-amazon.com/images/M/MV5BYjQ1ZTMxNzgtZDcxOC00NWY5LTk3ZjAtYzRhMDhlNDZlOWEzXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"
+            }
+          }
+        ],
+        "collectionName": "Test 7"
+      }
+    ]
   }
 ]

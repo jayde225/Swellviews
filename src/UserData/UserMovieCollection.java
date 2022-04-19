@@ -1,5 +1,7 @@
 package UserData;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -9,7 +11,9 @@ import java.util.Objects;
 public class UserMovieCollection {
 
     // VARIABLES
+    @Expose
     private ArrayList<UserMovieRating> MovieCollection = new ArrayList<UserMovieRating>();
+    @Expose
     private String collectionName;
 
     // CONSTRUCTOR
@@ -48,7 +52,7 @@ public class UserMovieCollection {
      */
     public boolean addMovie(UserMovieRating newMovie)
     {
-        boolean duplicateMovie = true;
+        boolean duplicateMovie = false;
         for (int i = 0; i < MovieCollection.size(); i++) {
             if (newMovie.equals(MovieCollection.get(i))) {
                 duplicateMovie = true;
