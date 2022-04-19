@@ -1,3 +1,5 @@
+package HomeMVC;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,6 +9,10 @@ import java.awt.event.MouseListener;
 import java.util.*;
 import java.io.*;
 
+import LoginMVC.LoginController;
+import LoginMVC.LoginModel;
+import LoginMVC.LoginView;
+import MovieMVC.*;
 import MovieData.Movie;
 import com.google.gson.*; //import for Gson capabilities
 
@@ -48,7 +54,7 @@ public class Home extends JFrame{
         JSeparator spacer = new JSeparator(); //Temporary Solution (maybe?) for separating header buttons
         JButton buttonFilter = new JButton("Filter");//JCheckBox allows multiselect, JRadioButton allows single
         JButton buttonCollections = new JButton("Collections");
-        JButton buttonAccount = new JButton("Account");
+        JButton buttonLogOut = new JButton("Log Out");
 
         //Homepage Header Attributes (added from above)
         JMenuBar header = new JMenuBar();
@@ -58,7 +64,23 @@ public class Home extends JFrame{
         header.add(spacer);
         header.add(buttonFilter);//***************************************
         header.add(buttonCollections);
-        header.add(buttonAccount);
+        header.add(buttonLogOut);
+
+        buttonLogOut.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Set up the MVC objects for logging in.
+                LoginModel loginModel = new LoginModel();
+                LoginView loginView = new LoginView();
+                LoginController loginController = new LoginController(loginModel, loginView);
+
+                loginModel.logOut();
+
+                // Display the login view.
+                loginView.setVisible(true);
+                homeFrame.setVisible(false);
+            }
+        });
 
         JPanel forwardAndBackButtons = new JPanel();
 

@@ -3,7 +3,11 @@ package LoginMVC;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 
+/**
+ * view logic for login screen
+ */
 public class LoginView extends JFrame {
+    // a pop-up window to log in before accessing swellviews
 
     private JLabel userLabel = new JLabel("Username:");
     private JLabel passLabel = new JLabel("Password:");
@@ -14,6 +18,10 @@ public class LoginView extends JFrame {
     private JButton loginButton = new JButton("Login");
     private JButton createAccountButton = new JButton("Create Account");
 
+    // CONSTRUCTOR
+    /**
+     * creates the login pop-up
+     */
     public LoginView() {
         JPanel panel = new JPanel();
 
@@ -30,23 +38,43 @@ public class LoginView extends JFrame {
         this.add(panel);
     }
 
+    /**
+     * returns the username input from the text field
+     * @return
+     */
     public String getUserName() {
         return userField.getText();
     }
 
+    /**
+     * returns the password input from the text field
+     * @return
+     */
     public String getPassword() {
         return passField.getText();
     }
 
-    void addLoginListener(ActionListener listener) {
+    /**
+     * adds an action lister to the login button
+     * @param listener
+     */
+    public void addLoginListener(ActionListener listener) {
         loginButton.addActionListener(listener);
    }
 
-    void addCreateAccountListener(ActionListener listener){
+    /**
+     * adds an action lister to the create account button
+     * @param listener
+     */
+    public void addCreateAccountListener(ActionListener listener){
         createAccountButton.addActionListener(listener);
    }
 
-    void displayLoginError(String errorMessage) {
+    /**
+     * shows a error in a pop-up window
+     * @param errorMessage
+     */
+    public void displayLoginError(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage);
     }
 }

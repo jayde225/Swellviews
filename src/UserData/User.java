@@ -133,7 +133,7 @@ public class User {
             return false;
         }
 
-        if (obj.getClass() != this.getClass()) {
+        if (obj.getClass() != this.getClass()) {    // user != user
             return false;
         }
 
