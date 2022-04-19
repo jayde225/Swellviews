@@ -72,7 +72,7 @@ public class Home extends JFrame{
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader("C:\\\\Users\\\\gmcop\\\\IdeaProjects\\\\Swellviews_Local\\\\src\\\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("C:\\\\Users\\\\jayde\\\\IdeaProjects\\\\Swellviews\\\\src\\\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
