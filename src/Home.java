@@ -18,7 +18,7 @@ import moviemodel.*; //import Swellviews package
  * movieEnd  - used when the movieGrid displays less than 8 items. Keeps track of how many extra spaces there were for use when going backwards in the grid.
  * movieListEnd - used to know when the ArrayList of movies has ended. 0 if there are more to read, 1 if not.
  * arrayListName - an ArrayList of Movie objects that is given new ArrayLists by Search, Filter, Sort, and Collection models. Used by movie display views.
- * displayName - a String used by movieGridUpdator
+ * displayName - a String used by movieGridUpdater
  */
 public class Home extends JFrame{
 
@@ -67,6 +67,13 @@ public class Home extends JFrame{
     static JRadioButton sortShortLong = new JRadioButton("Shortest to Longest");
     static JRadioButton sortLongShort = new JRadioButton("Longest to Shortest");
 
+    //STATIC ARRAYLIST TO HOLD ALL USER DATA
+    static ArrayList<User> userDatabase = new ArrayList<User>(); // An array list to hold a collection of movies
+
+    //STATIC VARIABLE TO SEE IF LOGGED IN
+    static boolean loggedIn;
+
+
     public static void main(String[] args) {
         //GSON IMPLEMENTATION CODE--------------------------------------------------------------------------------------
         String jsonString = "";
@@ -92,7 +99,33 @@ public class Home extends JFrame{
         arrayListName = CompleteMovieArrayList;
         //--------------END GSON IMPLEMENTATION-------------------------------------------------------------------------
 
-        boolean loggedIn = false; //Needs to be connected to the user class *************************************************************************************************
+        //USER DATA GSON IMPLEMENTATION -------------------------
+        String newjsonString = "";
+        Scanner inFileUser = null;
+        try {
+            inFileUser = new Scanner(new FileReader("C:\\Users\\jayde\\Documents\\GitHub\\Swellviews\\src\\UserData.json"));
+        } catch (FileNotFoundException fe) {
+            System.out.println("The file could not be opened.");
+            System.exit(0);
+        }
+
+        // Build the jsonString object line by line
+        while (inFileUser.hasNextLine()) {
+            newjsonString = newjsonString + inFileUser.nextLine();
+        }
+
+        //Build an ArrayList with all of the users found in the JSON String
+        Gson gsonUser = new Gson();
+        User[] userList;  //A java primitive of the User class
+        userList = gsonUser.fromJson(newjsonString, User[].class);
+        Collections.addAll(userDatabase, userList);
+
+        //Print out the arraylist to test it works
+        for (User testUser : userDatabase) {
+            System.out.printf("Username and password: " + testUser.Username + ", " + testUser.Password + "\n");
+        }
+        //END USER DATA IMPLEMENTATION-----------------------------
+
         //Homepage Attribute Declarations
         JFrame homeFrame = new JFrame("Swellviews");
         JTextField searchField = new JTextField("Enter Movie Name"); //figureout how to erase text on click in field
@@ -602,12 +635,9 @@ public class Home extends JFrame{
         loginWindowPanel.add(passField);
         loginWindowPanel.add(enterB);
 
-        if(loggedIn == true) {accountmenu.add(logoutB);}       // If logged in, show logout menu
-        else{
-            accountmenu.add(loginButton);
-            accountmenu.add(createAccountButton);
-            accountmenu.add(toggleDarkMode);
-        }     // If logged out, show login menu
+        accountmenu.add(loginButton);
+        accountmenu.add(createAccountButton);
+        accountmenu.add(toggleDarkMode);
 
 
         buttonAccount.addActionListener( new ActionListener() {
@@ -621,6 +651,7 @@ public class Home extends JFrame{
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 loginWindow.setVisible(true);
+
             }
         });
 
@@ -633,15 +664,14 @@ public class Home extends JFrame{
 
         enterB.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent button_pressed) {
-                //loginmenu.show(loginB, loginB.getWidth(), loginB.getHeight());
-                //javax.swing.MenuSelectionManager.defaultManager().clearSelectedPath();
-                loginWindow.setVisible(false);
-                //initiate proper login/creation procedure (check for existing username/create new one
+                User checkUser = new User(userField.getText(), passField.getText());
+                if (checkUser.logIn(checkUser, userDatabase)) {
+                    accountmenu.add(logoutB);
+                    createAccountButton.setVisible(false);
+                    loginButton.setVisible(false);
+                }
 
-                //once closes, initiate login procedure
-                //how use enter key OR click to submit
-                //need error handling (not close) for incorrect login, create account
-                // or to show login successful
+                loginWindow.setVisible(false); //Close the window
             }
         } );
 
