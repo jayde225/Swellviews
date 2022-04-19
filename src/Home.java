@@ -120,10 +120,6 @@ public class Home extends JFrame{
         userList = gsonUser.fromJson(newjsonString, User[].class);
         Collections.addAll(userDatabase, userList);
 
-        //Print out the arraylist to test it works
-        for (User testUser : userDatabase) {
-            System.out.printf("Username and password: " + testUser.Username + ", " + testUser.Password + "\n");
-        }
         //END USER DATA IMPLEMENTATION-----------------------------
 
         //Homepage Attribute Declarations
@@ -618,7 +614,7 @@ public class Home extends JFrame{
         loginWindow.setLocationRelativeTo(null);
 
         JButton enterB = new JButton("Enter");          // Confirm login button
-        JMenuItem logoutB = new JMenuItem("Log out");   // Logout button
+        JButton logoutB = new JButton("Log out");   // Logout button
 
         JLabel userLabel = new JLabel("Username:");     // Username Label
         JLabel passLabel = new JLabel("Password:");     // Password Label
@@ -671,7 +667,7 @@ public class Home extends JFrame{
                     loginButton.setVisible(false);
                 }
 
-                loginWindow.setVisible(false); //Close the window
+                loginWindow.setVisible(false); //Close the window after
             }
         } );
 
@@ -687,15 +683,14 @@ public class Home extends JFrame{
             }
         });
 
-        /*logoutB.addActionListener( new ActionListener() {
+        logoutB.addActionListener( new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                logoutmenu.show(logoutB, logoutB.getWidth(), logoutB.getHeight());
-                //This will need to do the logout procedure, what ever that looks like ***************
-                //will also need to close menu and somehow make loggedIn = false; again
-                //since menu item, will not use action listener and will need to act
-                //from that menu selection
+                //Re-enable visibility to the log-in and create account buttons, disable visibility on log-out
+                loginButton.setVisible(true);
+                createAccountButton.setVisible(true);
+                logoutB.setVisible(false);
             }
-        } );*/ /** Logout (Unfinished) */
+        } );
     }
 
     public static void collectionMenu (JButton buttonCollections) {
