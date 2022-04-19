@@ -11,6 +11,9 @@ import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+/**
+ * Class used to draw/display movie objects in a visual form. Displays the movie poster and the movie title below the poster.
+ */
 public class MovieDisplay extends JPanel{
 
     private String movieName;
@@ -18,11 +21,25 @@ public class MovieDisplay extends JPanel{
     private int showMovieTitle;
     private int titleDarkMode;
 
+    /**
+     * Constructor for MovieDisplay objects. MovieDisplay objects automatically draw/display when placed inside the movieGrid.
+     * @param name String, the title of the movie
+     * @param poster String, the poster link for the movie
+     * @param darkMode int, 1 = yes, dark mode on and 0 = no, dark mode off
+     * @param showTitle int, 1 = yes, show title and 0 = no, don't show title
+     */
     public MovieDisplay(String name, String poster, int darkMode, int showTitle) {
         this.movieName = name; this.moviePoster = poster; this.titleDarkMode = darkMode; this.showMovieTitle = showTitle;
     }
 
-
+    /**
+     * MovieDisplay objects automatically use this class when placed inside the movie grid.
+     * Draws the poster by using the provided link, draws a grey rectangle with a quetion mark if no link exists.
+     * Scales the posters to a common size.
+     * Draws the movie title below the poster image. If the title is over 25 characters, only draws the first 20 and adds and ellipses.
+     * Integrates "dark mode" by changing the font color to white if darkmode = 1 (on) or keeps the font black if darkmode = 0 (off).
+     * @param g Standard graphics variable used to draw 2d graphics.
+     */
     //Static Size Version:
     @Override
     public void paintComponent(Graphics g){

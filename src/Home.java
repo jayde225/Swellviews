@@ -4,12 +4,14 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.*;
 import java.io.*;
 
 import com.google.gson.*; //import for Gson capabilities
 
-import moviemodel.*; //import Swellviews package
+import moviemodel.*; //import moviemodel package
 
 /**
  * The homepage. Contains the Main.
@@ -20,7 +22,7 @@ import moviemodel.*; //import Swellviews package
  * arrayListName - an ArrayList of Movie objects that is given new ArrayLists by Search, Filter, Sort, and Collection models. Used by movie display views.
  * displayName - a String used by movieGridUpdater
  */
-public class Home extends JFrame{
+public class Home extends JFrame {
 
     private static int movieCounter = 0;
     private static int movieEnd = 0;
@@ -56,7 +58,7 @@ public class Home extends JFrame{
     static JCheckBox genreMusical = new JCheckBox("Musical");
     static JCheckBox genreBiography = new JCheckBox("Biography");
     static JCheckBox genreSport = new JCheckBox("Sport");
-    static JCheckBox genreHistory= new JCheckBox("History");
+    static JCheckBox genreHistory = new JCheckBox("History");
 
     //STATIC BUTTONS/CHECKBOXES USED FOR SORTING THE CURRENT MOVIE ARRAYLIST
     static JButton buttonApplySort = new JButton("Apply Sort");
@@ -71,7 +73,11 @@ public class Home extends JFrame{
     static ArrayList<User> userDatabase = new ArrayList<User>(); // An array list to hold a collection of movies
 
     //STATIC VARIABLE TO SEE IF LOGGED IN
-    static boolean loggedIn;
+    static int loggedIn = 0;
+
+    //STATIC ARRAYLISTS FOR LIKED AND DISLIKED MOVIES
+    static ArrayList<Movie> likedMovies = new ArrayList<Movie>();
+    static ArrayList<Movie> dislikedMovies = new ArrayList<Movie>();
 
 
     public static void main(String[] args) {
@@ -79,7 +85,7 @@ public class Home extends JFrame{
         String jsonString = "";
         Scanner inFile = null;
         try {
-            inFile = new Scanner(new FileReader("C:\\\\Users\\\\jayde\\\\IdeaProjects\\\\Swellviews\\\\src\\\\SampleMovieFile.json"));
+            inFile = new Scanner(new FileReader("src\\\\SampleMovieFile.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -103,7 +109,7 @@ public class Home extends JFrame{
         String newjsonString = "";
         Scanner inFileUser = null;
         try {
-            inFileUser = new Scanner(new FileReader("C:\\Users\\jayde\\Documents\\GitHub\\Swellviews\\src\\UserData.json"));
+            inFileUser = new Scanner(new FileReader("src\\UserData.json"));
         } catch (FileNotFoundException fe) {
             System.out.println("The file could not be opened.");
             System.exit(0);
@@ -140,7 +146,7 @@ public class Home extends JFrame{
         header.add(buttonSearch);
         header.add(spacer);
         header.add(buttonSort);
-        header.add(buttonFilter);//***************************************
+        header.add(buttonFilter);
         header.add(buttonCollections);
         header.add(buttonAccount);
 
@@ -150,11 +156,12 @@ public class Home extends JFrame{
 
         //MovieDisplay grid layout on homepage:
         JPanel movieGrid = new JPanel();
-        movieGrid.setLayout(new GridLayout(2,4));
+        movieGrid.setLayout(new GridLayout(2, 4));
 
         // DISPLAY MOVIES BY SEARCH------------------------------------------------------------------
         buttonSearch.addActionListener(new ActionListener() {
             ArrayList<Movie> searchedForMovies = new ArrayList<Movie>(); //An array list to hold movies that match search criteria
+
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 searchedForMovies.removeAll(searchedForMovies); //Reset the array
@@ -225,10 +232,11 @@ public class Home extends JFrame{
         //SORT THE MOVIES DISPLAYED
         buttonApplySort.addActionListener(new ActionListener() {
             ArrayList<Movie> movieCopy = new ArrayList<Movie>(); //An array list to hold a copy of whatever list in being sorted
+
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 //Sort whatever the last ArrayList that was used and display to user based off of what they selected
-                movieCopy = (ArrayList<Movie>)arrayListName.clone(); //Clone the array most recently used
+                movieCopy = (ArrayList<Movie>) arrayListName.clone(); //Clone the array most recently used
                 //Sort alphabetically A-Z
                 if (sortAZ.isSelected()) {
                     NameCompare nameCompare = new NameCompare();
@@ -309,8 +317,9 @@ public class Home extends JFrame{
         });
 
         //DISPLAY MOVIES BY USER SELECTED FILTER
-        buttonApply.addActionListener( new ActionListener() {
+        buttonApply.addActionListener(new ActionListener() {
             ArrayList<Movie> filteredMovies = new ArrayList<Movie>(); //An array list to hold movies that match filter criteria
+
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 filteredMovies.removeAll(filteredMovies); //Reset the Array
@@ -494,11 +503,11 @@ public class Home extends JFrame{
             }
         });
 
-        JButton goBack = new JButton ("Go Back");
+        JButton goBack = new JButton("Go Back");
         goBack.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (movieCounter > 15-movieEnd) {
+                if (movieCounter > 15 - movieEnd) {
                     movieGrid.removeAll();
                     SwingUtilities.updateComponentTreeUI(homeFrame);
                     movieCounter = movieCounter - 16 + movieEnd;
@@ -510,7 +519,7 @@ public class Home extends JFrame{
         });
 
 
-        JButton goHome = new JButton ("Home");
+        JButton goHome = new JButton("Home");
         goHome.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
@@ -528,8 +537,8 @@ public class Home extends JFrame{
         forwardAndBackButtons.add(getMoreMovies);
         forwardAndBackButtons.add(goHome);
 
-        accountMenu(buttonAccount, loggedIn); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
-        collectionMenu(buttonCollections); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
+        collectionMenu(buttonCollections, forwardAndBackButtons, homeFrame, movieGrid); // Calls the collectionMenu function and attaches it to the "Collections" button (buttonCollections)
+        accountMenu(buttonAccount); // Calls the accountMenu function and attaches it to the "Account" button (buttonAccount)
         filterMenu(buttonFilter);
         sortMenu(buttonSort);
 
@@ -550,21 +559,20 @@ public class Home extends JFrame{
     }
 
     /**
-     *
-     * @param home
-     * @param forwardAndBackButtons
-     * @param movieArrayList
-     * @param movieGrid
+     * Used to change the Movie and MovieDisplay obejcts in movieGrid
+     * @param home homeFrame JFrame needed to add the updated movieGrid
+     * @param forwardAndBackButtons Used for dark mode to change background color
+     * @param movieArrayList The ArrayList of movies being viewed
+     * @param movieGrid JPanel movieGrid, contents will be re-added and the border name changed based on action being performed
      */
-    public static void movieGridUpdater(JFrame home, JPanel forwardAndBackButtons, ArrayList<Movie> movieArrayList, JPanel movieGrid){
+    public static void movieGridUpdater(JFrame home, JPanel forwardAndBackButtons, ArrayList<Movie> movieArrayList, JPanel movieGrid) {
 
         movieGrid.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), displayName)); //Etched border to display type of content being presented (set by string displayName above)
 
-        if (darkMode == 0){
+        if (darkMode == 0) {
             movieGrid.setBackground(null);
             forwardAndBackButtons.setBackground(null);
-        }
-        else {
+        } else {
             movieGrid.setBackground(Color.darkGray);
             forwardAndBackButtons.setBackground(Color.darkGray);
         }
@@ -572,7 +580,7 @@ public class Home extends JFrame{
         Iterator e = movieArrayList.iterator();
         int iteratorCounter = 0;
 
-        while(movieCounter > iteratorCounter) {
+        while (movieCounter > iteratorCounter) {
             e.next();
             iteratorCounter++;
         }
@@ -582,10 +590,9 @@ public class Home extends JFrame{
                 MovieDisplay movie1 = new MovieDisplay(movieArrayList.get(movieCounter).getTitle(), movieArrayList.get(movieCounter).getPosterLink(), darkMode, 1);
                 movieCounter++;
                 movieGrid.add(movie1);
-                MovieDetailsDisplay movieForDisplay= new MovieDetailsDisplay(movie1, movieArrayList, movieCounter, darkMode); //Simply calling MovieDetailsDisplay does everything
+                MovieDetailsDisplay(movie1, movieArrayList, movieCounter, darkMode); //Simply calling MovieDetailsDisplay does everything
                 e.next();
-            }
-            else {
+            } else {
                 movieEnd = 8 - counter;
                 movieListEnd = 1;
                 break;
@@ -594,13 +601,16 @@ public class Home extends JFrame{
         home.add(movieGrid, BorderLayout.CENTER); //Adds MovieDisplay test to center of page
     }
 
-    public static void accountMenu(JButton buttonAccount, boolean loggedIn){ //make popups bigger
+    /**
+     * Controls the account menu where users can log in, log out, create account, and toggle dark mode.
+     * @param buttonAccount JButton for "Account" (used to attach ActionListener that opens the account menu)
+     */
+    public static void accountMenu(JButton buttonAccount) { //make popups bigger
 
         JPopupMenu accountmenu = new JPopupMenu();
         JButton loginButton = new JButton("Log In                          ");
-        JButton createAccountButton = new JButton("Create new account ");
-        JButton toggleDarkMode = new JButton("ToggleDarkMode");
-        boolean haveAccount;
+        //JButton createAccountButton = new JButton("Create new account ");
+        JButton toggleDarkMode = new JButton("ToggleDarkMode    ");
         //final JPopupMenu logoutmenu = new JPopupMenu();
 
         JFrame loginWindow = new JFrame("Login"); //"Popup" window for entering user info
@@ -622,7 +632,7 @@ public class Home extends JFrame{
         JTextField userField = new JTextField();            // User enters username
         JTextField passField = new JTextField();            // User enters password
 
-        userField.setSize(200,10);
+        userField.setSize(200, 10);
         passField.setSize(200, 10);
 
         loginWindowPanel.add(userLabel); //setMenuLoction(int x, int y) for login window
@@ -632,18 +642,18 @@ public class Home extends JFrame{
         loginWindowPanel.add(enterB);
 
         accountmenu.add(loginButton);
-        accountmenu.add(createAccountButton);
+        //accountmenu.add(createAccountButton);
         accountmenu.add(toggleDarkMode);
 
 
-        buttonAccount.addActionListener( new ActionListener() {
+        buttonAccount.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 accountmenu.show(buttonAccount, buttonAccount.getHorizontalAlignment(), buttonAccount.getHeight());
             }
         });
 
-        loginButton.addActionListener( new ActionListener() {
+        loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 loginWindow.setVisible(true);
@@ -651,49 +661,57 @@ public class Home extends JFrame{
             }
         });
 
-        createAccountButton.addActionListener( new ActionListener() {
+        /*
+        createAccountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 loginWindow.setVisible(true);
             }
         });
+         */
 
-        enterB.addActionListener( new ActionListener() {
+        enterB.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent button_pressed) {
                 User checkUser = new User(userField.getText(), passField.getText());
                 if (checkUser.logIn(checkUser, userDatabase)) {
                     accountmenu.add(logoutB);
-                    createAccountButton.setVisible(false);
+                    //createAccountButton.setVisible(false);
                     loginButton.setVisible(false);
                 }
 
                 loginWindow.setVisible(false); //Close the window after
             }
-        } );
+        });
 
         toggleDarkMode.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (darkMode == 1){
+                if (darkMode == 1) {
                     darkMode = 0;
-                }
-                else{
+                } else {
                     darkMode = 1;
                 }
             }
         });
 
-        logoutB.addActionListener( new ActionListener() {
+        logoutB.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 //Re-enable visibility to the log-in and create account buttons, disable visibility on log-out
                 loginButton.setVisible(true);
-                createAccountButton.setVisible(true);
+                //createAccountButton.setVisible(true);
                 logoutB.setVisible(false);
             }
-        } );
+        });
     }
 
-    public static void collectionMenu (JButton buttonCollections) {
+    /**
+     * Creates a popup menu with existing collections and the ability to add a new collection through a button linked to a new JFrame with a JTextField
+     * @param buttonCollections JButton buttonCollections, used to attach ActionListener that displays the collection Menu
+     * @param forwardAndBackButtons JPanel forwardAndBackButtons contains "Go Back," "Show More," and "Home" buttons needed to call movieGridUpdator
+     * @param home homeFrame JFrame needed to call movieGridUpdator
+     * @param movieGrid JPanel movieGrid needed to call movieGridUpdator
+     */
+    public static void collectionMenu(JButton buttonCollections, JPanel forwardAndBackButtons, JFrame home, JPanel movieGrid) {
 
         JPopupMenu collectionMenu = new JPopupMenu(); // Main popup for list of collections
         JFrame createNewCollection = new JFrame("Create a New Collection"); //"Popup" window for entering the name of a new collection
@@ -706,38 +724,61 @@ public class Home extends JFrame{
         JButton createCollection = new JButton("Create a New Collection");
 
         //Creating items for the collectionMenu list:
-        JMenuItem testItem1 = new JMenuItem("Test Item 1");
-        JMenuItem testItem2 = new JMenuItem("Test Item 123456789");
+        JMenuItem testItem1 = new JMenuItem("Likes");
+        JMenuItem testItem2 = new JMenuItem("Dislikes");
+
+        testItem1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                movieCounter = 0;
+                movieGrid.removeAll();
+                SwingUtilities.updateComponentTreeUI(home);
+                movieListEnd = 0;
+                displayName = "Liked Movies";
+                movieGridUpdater(home, forwardAndBackButtons, likedMovies, movieGrid);
+            }
+        });
+
+        testItem2.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                movieCounter = 0;
+                movieGrid.removeAll();
+                SwingUtilities.updateComponentTreeUI(home);
+                movieListEnd = 0;
+                displayName = "Disliked Movies";
+                movieGridUpdater(home, forwardAndBackButtons, dislikedMovies, movieGrid);
+            }
+        });
 
         //Adding items to the collectionMenu list:
         collectionMenu.add(testItem1);
         collectionMenu.add(testItem2);
-        collectionMenu.add(createCollection); // Button for creating a new collection (should be kept at the bottom)
+
+        //collectionMenu.add(createCollection); // Button for creating a new collection (should be kept at the bottom)
 
         //Creating items for the createNewCollection popup:
-        JLabel collectionNameLabel = new JLabel("Enter Collection Name:");
-        JTextField collectionNameField = new JTextField("New Collection");
-        collectionNameField.setSize(100,10);
-        JButton collectionCreate = new JButton ("Create");
-
-        //Adding items to the createNewCollection popup:
-        createNewCollectionPanel.add(collectionNameLabel);
-        createNewCollectionPanel.add(collectionNameField);
-        createNewCollectionPanel.add(collectionCreate);
-
-        createNewCollection.setSize(310, 100);
-        createNewCollection.setLocationRelativeTo(null);
+            /*JLabel collectionNameLabel = new JLabel("Enter Collection Name:");
+            JTextField collectionNameField = new JTextField("New Collection");
+            collectionNameField.setSize(100, 10);
+            JButton collectionCreate = new JButton("Create");
+            //Adding items to the createNewCollection popup:
+            createNewCollectionPanel.add(collectionNameLabel);
+            createNewCollectionPanel.add(collectionNameField);
+            createNewCollectionPanel.add(collectionCreate);
+            createNewCollection.setSize(310, 100);
+            createNewCollection.setLocationRelativeTo(null);*/
 
         //ActionListener for showing collection list menu when "Collections" button pressed
-        buttonCollections.addActionListener (new ActionListener() { // When the collections button (buttonCollections) is pressed...
+        buttonCollections.addActionListener(new ActionListener() { // When the collections button (buttonCollections) is pressed...
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                collectionMenu.show(buttonCollections, buttonCollections.getHorizontalAlignment(),buttonCollections.getHeight()); //Menu appears below and on the right side of the collections button (buttonCollections)
+                collectionMenu.show(buttonCollections, buttonCollections.getHorizontalAlignment(), buttonCollections.getHeight()); //Menu appears below and on the right side of the collections button (buttonCollections)
             }
         });
 
         //ActionListener for showing new collection creation menu when "Create a New Collection" button pressed
-        createCollection.addActionListener (new ActionListener() {
+        createCollection.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -746,15 +787,18 @@ public class Home extends JFrame{
         });
 
         //ActionListener for adding a new collection when "Create" is pressed within the createNewCollection Frame
-        collectionCreate.addActionListener (new ActionListener(){
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.out.println(collectionNameField.getText());
-            }
-        });
+           /* collectionCreate.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    System.out.println(collectionNameField.getText());
+                }
+            });*/
     }
 
+    /**
+     * Creates a JPopupMenu with options for sorting by various criteria.
+     * @param buttonSort JButton buttonSort, used to attach ActionListener that reveals the sort menu JPopupMenu
+     */
     //Sort by year (oldest to newest, newest to oldest), alphabetically (A-Z, Z-A), or runtime (short to longest, longest to shortest)
     public static void sortMenu(JButton buttonSort) {
         JPopupMenu sortPopupMenu = new JPopupMenu();
@@ -781,17 +825,20 @@ public class Home extends JFrame{
         sortBox.add(sortLongShort);
         sortBox.add(buttonApplySort);
 
-        buttonSort.addActionListener( new ActionListener() {
+        buttonSort.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                sortPopupMenu.show(buttonSort, buttonSort.getHorizontalAlignment(),buttonSort.getHeight());
+                sortPopupMenu.show(buttonSort, buttonSort.getHorizontalAlignment(), buttonSort.getHeight());
             }
         });
-
     }
 
+    /**
+     * Creates a JPopupMenu with options for filtering the current ArrayList of movies by various criteria.
+     * @param buttonFilter JButton buttonFilter, used to attach ActionListener that displays the filter menu JPopupMenu
+     */
     //filter: genre, maturity rating, runtime (under 2 hours etc)
-    public static void filterMenu(JButton buttonFilter){
+    public static void filterMenu(JButton buttonFilter) {
         JPopupMenu filterPopupMenu = new JPopupMenu();
         JPanel filterBox = new JPanel();
         filterBox.setLayout(new BoxLayout(filterBox, BoxLayout.Y_AXIS));
@@ -836,14 +883,14 @@ public class Home extends JFrame{
 
         filterBox.add(buttonApply);
 
-        buttonFilter.addActionListener( new ActionListener() {
+        buttonFilter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
-                filterPopupMenu.show(buttonFilter, buttonFilter.getHorizontalAlignment(),buttonFilter.getHeight());
+                filterPopupMenu.show(buttonFilter, buttonFilter.getHorizontalAlignment(), buttonFilter.getHeight());
             }
         });
 
-        buttonClear.addActionListener( new ActionListener() {
+        buttonClear.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent button_pressed) {
                 ratedG.setSelected(false);
@@ -871,6 +918,131 @@ public class Home extends JFrame{
                 genreBiography.setSelected(false);
                 genreSport.setSelected(false);
                 genreHistory.setSelected(false);
+            }
+        });
+    }
+
+    /**
+     * MovieDetailsDisplay constructor, automatically creates new JFrame using MovieDisplay object given and movie details from Movie.java, and attaches new MouseListener to the MovieDisplay given that shows the frame on click.
+     * @param movieSelected  The MovieDisplay object used in the movieGrid (used to attach MouseListener)
+     * @param movieArrayList ArrayList of Movie objects being viewed
+     * @param movieCounter   The static int "movieCounter", used to know where in the ArrayList the Movie is
+     * @param darkMode       The static int "darkMode" (or manual 1 if yes, 0 if no)
+     */
+    public static void MovieDetailsDisplay(MovieDisplay movieSelected, ArrayList<Movie> movieArrayList, int movieCounter, int darkMode) {
+
+        JFrame movieDetailsFrame = new JFrame(movieArrayList.get(movieCounter - 1).getTitle());
+        JPanel movieDetailsRightPanel = new JPanel();
+        movieDetailsRightPanel.setLayout(new GridLayout(12, 1));
+
+        JLabel movieTitle = new JLabel("Title: " + movieArrayList.get(movieCounter - 1).getTitle());
+        JLabel movieYear = new JLabel("Year: " + movieArrayList.get(movieCounter - 1).getYear().toString());
+        JLabel movieGenre = new JLabel("Genre: " + movieArrayList.get(movieCounter - 1).getGenres());
+        JLabel movieAgeRating = new JLabel("Age Rating: " + movieArrayList.get(movieCounter - 1).getMPARating());
+        JLabel movieRuntime = new JLabel("Runtime: " + movieArrayList.get(movieCounter - 1).getRunTime());
+        JLabel movieDirector = new JLabel("Director: " + movieArrayList.get(movieCounter - 1).getDirector());
+        JLabel movieWriter = new JLabel("Writer: " + movieArrayList.get(movieCounter - 1).getWriters());
+        JLabel movieActors = new JLabel("Actors: " + movieArrayList.get(movieCounter - 1).getActors());
+
+        JLabel moviePlotLabel = new JLabel("Plot:");
+        JTextArea moviePlot = new JTextArea(movieArrayList.get(movieCounter - 1).getPlot());
+        moviePlot.setEditable(false);
+        moviePlot.setWrapStyleWord(true);
+        moviePlot.setLineWrap(true);
+
+        JLabel movieLanguage = new JLabel();
+        JLabel movieCountry = new JLabel();
+        JLabel movieAwards = new JLabel("Awards: " + movieArrayList.get(movieCounter - 1).getAwards());
+        JLabel movieRatings = new JLabel();
+        JLabel movieRating = new JLabel();
+
+        JPanel rateMovieButtons = new JPanel();
+        JButton dislikeMovie = new JButton("Dislike");
+        JButton likeMovie = new JButton("Like");
+        rateMovieButtons.add(dislikeMovie);
+        rateMovieButtons.add(likeMovie);
+
+        JButton addToCollection = new JButton("Add to Collection");
+
+        movieDetailsRightPanel.add(movieTitle);
+        movieDetailsRightPanel.add(movieGenre);
+        movieDetailsRightPanel.add(movieYear);
+        movieDetailsRightPanel.add(movieAgeRating);
+        movieDetailsRightPanel.add(movieRuntime);
+        movieDetailsRightPanel.add(movieDirector);
+        movieDetailsRightPanel.add(movieWriter);
+        movieDetailsRightPanel.add(movieActors);
+        movieDetailsRightPanel.add(movieAwards);
+        movieDetailsRightPanel.add(moviePlotLabel);
+        movieDetailsRightPanel.add(moviePlot);
+        movieDetailsRightPanel.add(rateMovieButtons);
+        //movieDetailsRightPanel.add(addToCollection); Removed because backend functionality was not completed
+
+        likeMovie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                likedMovies.add(movieArrayList.get(movieCounter - 1));
+            }
+        });
+
+        dislikeMovie.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                dislikedMovies.add(movieArrayList.get(movieCounter - 1));
+            }
+        });
+
+        movieDetailsFrame.setLayout(new GridLayout(1, 2));
+        movieDetailsFrame.setSize(700, 550);
+        movieDetailsFrame.setLocationRelativeTo(null);
+
+        if (darkMode == 1) {
+            movieTitle.setForeground(Color.white);
+            movieGenre.setForeground(Color.white);
+            movieYear.setForeground(Color.white);
+            movieAgeRating.setForeground(Color.white);
+            movieRuntime.setForeground(Color.white);
+            movieDirector.setForeground(Color.white);
+            movieWriter.setForeground(Color.white);
+            movieActors.setForeground(Color.white);
+            movieAwards.setForeground(Color.white);
+            moviePlotLabel.setForeground(Color.white);
+            movieDetailsFrame.getContentPane().setBackground(Color.darkGray);
+            moviePlot.setBackground(Color.darkGray);
+            moviePlot.setForeground(Color.white);
+            movieDetailsRightPanel.setBackground(Color.darkGray);
+            rateMovieButtons.setBackground(Color.darkGray);
+        }
+
+        MovieDisplay movieSelectionDisplay = new MovieDisplay(movieArrayList.get(movieCounter - 1).getTitle(), movieArrayList.get(movieCounter - 1).getPosterLink(), darkMode, 1);
+
+        movieSelected.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                movieDetailsFrame.add(movieSelectionDisplay);
+                movieDetailsFrame.add(movieDetailsRightPanel);
+                movieDetailsFrame.setVisible(true);
+            }
+
+            //These shouldn't be needed:
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
             }
         });
     }
